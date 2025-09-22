@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Calendario de Suplementos</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#34d399">
+    <link rel="apple-touch-icon" href="https://placehold.co/192x192/34d399/ffffff?text=Supps">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+    <style>
+        /* Estilos base y configuración de modo oscuro */
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark {
+            --bg-color: #1f2937;
+            --bg-secondary-color: #374151;
+            --text-color: #f3f4f6;
+            --text-secondary-color: #d1d5db;
+            --border-color: #4b5563;
+        }
+        html.dark body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        /* Clases personalizadas */
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: background-color 0.3s;
+        }
+        .dark .card {
+            background-color: var(--bg-secondary-color);
+            border: 1px solid var(--border-color);
+        }
+        .nav-button {
+            transition: all 0.2s ease-in-out;
+        }
+        .nav-button.active {
+            background-color: #10b981; /* emerald-500 */
+            color: white;
+        }
+        .dark .nav-button.active {
+            background-color: #34d399; /* emerald-400 */
+        }
+        /* Animación para la aparición de elementos */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .material-icons-outlined {
+            font-size: 1.25rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+
+    <div class="container mx-auto max-w-4xl p-4 min-h-screen">
+        <!-- Encabezado -->
+        <header class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl md:text-3xl font-bold text-emerald-600 dark:text-emerald-400">Mi Calendario de Suplementos</h1>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                <span class="material-icons-outlined" id="theme-icon">light_mode</span>
+            </button>
+        </header>
+
+        <!-- Navegación -->
+        <nav class="card p-2 flex justify-around mb-6">
+            <button data-view="dashboard" class="nav-button active flex-1 py-2 px-4 rounded-md flex items-center justify-center gap-2">
+                <span class="material-icons-outlined">today</span> Hoy
+            </button>
+            <button data-view="calendar" class="nav-button flex-1 py-2 px-4 rounded-md flex items-center justify-center gap-2">
+                <span class="material-icons-outlined">calendar_month</span> Calendario
+            </button>
+            <button data-view="history" class="nav-button flex-1 py-2 px-4 rounded-md flex items-center justify-center gap-2">
+                <span class="material-icons-outlined">history</span> Historial
+            </button>
+            <button data-view="manage" class="nav-button flex-1 py-2 px-4 rounded-md flex items-center justify-center gap-2">
+                <span class="material-icons-outlined">settings</span> Gestión
+            </button>
+        </nav>
+
+        <main>
+            <!-- Vista del Día (Dashboard) -->
+            <div id="dashboard-view" class="view fade-in">
+                <div class="card p-6 mb-6">
+                    <h2 class="text-xl font-semibold mb-1" id="today-date"></h2>
+                    <p class="text-gray-500 dark:text-gray-400 mb-4" id="current-phase"></p>
+                    <div id="today-supplements" class="space-y-4">
+                        <!-- Los suplementos del día se insertarán aquí -->
+                    </div>
+                    <p id="no-supplements-today" class="text-center text-gray-500 dark:text-gray-400 py-4 hidden">No hay suplementos programados para hoy.</p>
+                </div>
+                <div class="card p-6">
+                     <h3 class="text-lg font-semibold mb-4">Resumen Semanal</h3>
+                     <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4">
+                         <div id="weekly-progress-bar" class="bg-emerald-500 h-4 rounded-full transition-all duration-500" style="width: 0%;"></div>
+                     </div>
+                     <p id="weekly-progress-text" class="text-right mt-2 text-sm font-medium text-gray-600 dark:text-gray-300">0% completado</p>
+                </div>
+            </div>
+
+            <!-- Vista de Calendario -->
+            <div id="calendar-view" class="view hidden fade-in">
+                <div class="card p-4 md:p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <button id="prev-month" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><span class="material-icons-outlined">chevron_left</span></button>
+                        <h2 id="month-year" class="text-xl font-semibold"></h2>
+                        <button id="next-month" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><span class="material-icons-outlined">chevron_right</span></button>
+                    </div>
+                    <div id="calendar-grid" class="grid grid-cols-7 gap-1 text-center">
+                        <!-- El calendario se generará aquí -->
+                    </div>
+                </div>
+                <div id="calendar-day-details" class="mt-6"></div>
+            </div>
+
+            <!-- Vista de Historial -->
+            <div id="history-view" class="view hidden fade-in card p-6">
+                <h2 class="text-xl font-semibold mb-4">Historial de Tomas</h2>
+                <div class="flex gap-4 mb-4">
+                    <input type="month" id="history-month-picker" class="p-2 border rounded-md bg-transparent dark:border-gray-600">
+                    <button id="export-csv" class="bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600 flex items-center gap-2">
+                        <span class="material-icons-outlined">download</span> Exportar CSV
+                    </button>
+                </div>
+                <div id="history-log" class="space-y-4">
+                    <!-- El historial se mostrará aquí -->
+                </div>
+            </div>
+
+            <!-- Vista de Gestión -->
+            <div id="manage-view" class="view hidden fade-in space-y-6">
+                <div class="card p-6">
+                    <h2 class="text-xl font-semibold mb-4">Gestionar Fases y Suplementos</h2>
+                    <div id="phases-container" class="space-y-4">
+                        <!-- Las fases y sus suplementos se mostrarán aquí -->
+                    </div>
+                    <button id="add-phase-btn" class="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Agregar Nueva Fase</button>
+                </div>
+                 <div class="card p-6">
+                    <h2 class="text-xl font-semibold mb-4">Carga Masiva de Suplementos</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Sube un archivo JSON para agregar o actualizar fases y suplementos.</p>
+                    <input type="file" id="json-upload" accept=".json" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"/>
+                 </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para editar/agregar suplemento -->
+    <div id="supplement-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
+        <div class="card p-6 w-full max-w-md">
+            <h2 id="modal-title" class="text-lg font-bold mb-4"></h2>
+            <form id="supplement-form">
+                <input type="hidden" id="modal-phase-id">
+                <input type="hidden" id="modal-supplement-index">
+                <div class="mb-4">
+                    <label for="supplement-name" class="block text-sm font-medium mb-1">Nombre</label>
+                    <input type="text" id="supplement-name" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                </div>
+                <div class="mb-4">
+                    <label for="supplement-dosis" class="block text-sm font-medium mb-1">Dosis</label>
+                    <input type="text" id="supplement-dosis" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                </div>
+                <div class="mb-4">
+                    <label for="supplement-horario" class="block text-sm font-medium mb-1">Horario</label>
+                    <input type="text" id="supplement-horario" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                </div>
+                <div class="flex justify-end gap-4">
+                    <button type="button" id="cancel-modal" class="py-2 px-4 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600">Cancelar</button>
+                    <button type="submit" class="bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal para editar/agregar fase -->
+    <div id="phase-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
+        <div class="card p-6 w-full max-w-md">
+            <h2 id="phase-modal-title" class="text-lg font-bold mb-4"></h2>
+            <form id="phase-form">
+                <input type="hidden" id="modal-phase-edit-id">
+                <div class="mb-4">
+                    <label for="phase-name" class="block text-sm font-medium mb-1">Nombre de la Fase</label>
+                    <input type="text" id="phase-name" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                </div>
+                <div class="mb-4">
+                    <label for="phase-start" class="block text-sm font-medium mb-1">Fecha de Inicio</label>
+                    <input type="date" id="phase-start" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                </div>
+                <div class="mb-4">
+                    <label for="phase-end" class="block text-sm font-medium mb-1">Fecha de Fin</oabel>
+                    <input type="date" id="phase-end" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                </div>
+                <div class="flex justify-end gap-4">
+                    <button type="button" id="cancel-phase-modal" class="py-2 px-4 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600">Cancelar</button>
+                    <button type="submit" class="bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar</fase>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script type="module">
+        // --- CONFIGURACIÓN INICIAL Y DATOS POR DEFECTO ---
+        const initialData = {
+          "fases": [
+            {
+              "id": 0, "nombre": "Fase 0", "inicio": "2025-09-22", "fin": "2025-09-29",
+              "suplementos": [
+                { "nombre": "Probiótico", "dosis": "1 cápsula", "horario": "07h00 (ayunas)" },
+                { "nombre": "Complejo B", "dosis": "1 tableta", "horario": "07h30 (desayuno)" },
+                { "nombre": "Zinc", "dosis": "1 cápsula", "horario": "07h30 (desayuno)" },
+                { "nombre": "Aceite de hígado de bacalao", "dosis": "1 cápsula", "horario": "07h30 (desayuno o almuerzo)" },
+                { "nombre": "Omega-3", "dosis": "1 cápsula", "horario": "13h00 (almuerzo)" },
+                { "nombre": "Ashwagandha", "dosis": "1 cápsula", "horario": "18h30 (merienda)" },
+                { "nombre": "Magnesio", "dosis": "1 cápsula", "horario": "21h00 (noche)" },
+                { "nombre": "Proteína Fresubin", "dosis": "2 scoops", "horario": "mañana y noche" },
+                { "nombre": "Pepti Lagen", "dosis": "1 sobre", "horario": "media mañana y media tarde" }
+              ]
+            },
+            {
+              "id": 1, "nombre": "Fase 1", "inicio": "2025-09-30", "fin": "2025-10-31",
+              "suplementos": [
+                { "nombre": "Vitamina C natural (acerola/camu camu)", "dosis": "500 mg", "horario": "07h30 (desayuno)" },
+                { "nombre": "Cardo Mariano", "dosis": "200–400 mg", "horario": "13h00 (almuerzo)" },
+                { "nombre": "Nux vomica 30CH", "dosis": "5 glóbulos", "horario": "16h00 (tarde) y 21h00 (noche)" }
+              ]
+            },
+            {
+              "id": 2, "nombre": "Fase 2", "inicio": "2025-11-01", "fin": "2025-11-30",
+              "suplementos": [
+                { "nombre": "Saw Palmetto (Serenoa repens)", "dosis": "320 mg", "horario": "13h00 (almuerzo)" },
+                { "nombre": "Crataegus (espino blanco)", "dosis": "30 gotas o 300 mg", "horario": "18h30 (merienda o noche)" }
+              ]
+            },
+            {
+              "id": 3, "nombre": "Fase 3", "inicio": "2025-12-01", "fin": "2025-12-31",
+              "suplementos": [
+                { "nombre": "Maca andina", "dosis": "2–3 g", "horario": "07h30 (desayuno)" },
+                { "nombre": "Spirulina", "dosis": "2–4 g", "horario": "10h30 (media mañana)" }
+              ]
+            }
+          ]
+        };
+
+        const AppState = {
+            data: { fases: [] },
+            history: {},
+            settings: {
+                theme: 'light',
+                notifications: false
+            },
+            currentDate: new Date('2025-09-22T10:00:00'), // For demonstration purposes
+            calendarDate: new Date('2025-09-22T10:00:00'),
+            activeView: 'dashboard'
+        };
+        
+        // --- ELEMENTOS DEL DOM ---
+        const $ = (selector) => document.querySelector(selector);
+        const $$ = (selector) => document.querySelectorAll(selector);
+
+        // --- LÓGICA DE DATOS Y ESTADO ---
+        function saveState() {
+            localStorage.setItem('supplementApp', JSON.stringify({
+                data: AppState.data,
+                history: AppState.history,
+                settings: AppState.settings
+            }));
+        }
+
+        function loadState() {
+            const savedState = localStorage.getItem('supplementApp');
+            if (savedState) {
+                const parsed = JSON.parse(savedState);
+                AppState.data = parsed.data;
+                AppState.history = parsed.history;
+                AppState.settings = parsed.settings;
+            } else {
+                AppState.data = JSON.parse(JSON.stringify(initialData));
+                AppState.history = {};
+                AppState.settings = { theme: 'light', notifications: false };
+            }
+        }
+
+        // --- FUNCIONES DE UTILIDAD (FECHAS, ETC.) ---
+        function formatDate(date, options = { year: 'numeric', month: 'long', day: 'numeric' }) {
+            return date.toLocaleDateString('es-ES', options);
+        }
+        function toISODateString(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        // --- LÓGICA PRINCIPAL DE LA APLICACIÓN ---
+        function getCurrentPhase(date) {
+            const dateStr = toISODateString(date);
+            return AppState.data.fases.find(fase => dateStr >= fase.inicio && dateStr <= fase.fin);
+        }
+
+        function getSupplementsForDate(date) {
+            const phase = getCurrentPhase(date);
+            return phase ? phase.suplementos : [];
+        }
+
+        // --- FUNCIONES DE RENDERIZADO ---
+        function render() {
+            renderDashboard();
+            renderCalendar();
+            renderHistory();
+            renderManageView();
+            applyTheme();
+            
+            // Actualizar la vista activa
+            $$('.view').forEach(v => v.classList.add('hidden'));
+            $(`#${AppState.activeView}-view`).classList.remove('hidden');
+
+            $$('.nav-button').forEach(b => b.classList.remove('active'));
+            $(`.nav-button[data-view="${AppState.activeView}"]`).classList.add('active');
+        }
+
+        function renderDashboard() {
+            const today = AppState.currentDate;
+            $('#today-date').textContent = formatDate(today, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            
+            const phase = getCurrentPhase(today);
+            $('#current-phase').textContent = phase ? `Estás en: ${phase.nombre}` : 'No hay una fase activa para hoy.';
+
+            const supplements = getSupplementsForDate(today);
+            const container = $('#today-supplements');
+            container.innerHTML = '';
+            
+            if (supplements.length > 0) {
+                 $('#no-supplements-today').classList.add('hidden');
+                 supplements.forEach(sup => {
+                    const dateStr = toISODateString(today);
+                    const isTaken = AppState.history[dateStr] && AppState.history[dateStr][sup.nombre];
+                    const element = document.createElement('div');
+                    element.className = 'flex items-center justify-between p-3 rounded-lg border dark:border-gray-700 bg-gray-50 dark:bg-gray-800';
+                    element.innerHTML = `
+                        <div class="flex items-center">
+                             <input type="checkbox" id="sup-${sup.nombre.replace(/\s/g, '')}" data-name="${sup.nombre}" ${isTaken ? 'checked' : ''} class="h-6 w-6 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 mr-4">
+                            <div>
+                                <label for="sup-${sup.nombre.replace(/\s/g, '')}" class="font-semibold">${sup.nombre}</label>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">${sup.dosis} - ${sup.horario}</p>
+                            </div>
+                        </div>
+                        <span class="material-icons-outlined text-2xl ${isTaken ? 'text-emerald-500' : 'text-gray-400'}">${isTaken ? 'check_circle' : 'radio_button_unchecked'}</span>
+                    `;
+                    container.appendChild(element);
+                });
+            } else {
+                $('#no-supplements-today').classList.remove('hidden');
+            }
+
+            renderWeeklyProgress();
+        }
+
+        function renderWeeklyProgress() {
+            let totalSupps = 0;
+            let takenSupps = 0;
+            const today = AppState.currentDate;
+
+            for (let i = 0; i < 7; i++) {
+                const day = new Date(today);
+                day.setDate(today.getDate() - i);
+                const dateStr = toISODateString(day);
+                const daySupps = getSupplementsForDate(day);
+                totalSupps += daySupps.length;
+
+                if (AppState.history[dateStr]) {
+                    takenSupps += Object.values(AppState.history[dateStr]).filter(Boolean).length;
+                }
+            }
+            
+            const percentage = totalSupps > 0 ? Math.round((takenSupps / totalSupps) * 100) : 0;
+            $('#weekly-progress-bar').style.width = `${percentage}%`;
+            $('#weekly-progress-text').textContent = `${percentage}% completado esta semana`;
+        }
+
+
+        function renderCalendar() {
+            const date = AppState.calendarDate;
+            const month = date.getMonth();
+            const year = date.getFullYear();
+
+            $('#month-year').textContent = formatDate(date, { month: 'long', year: 'numeric' });
+
+            const grid = $('#calendar-grid');
+            grid.innerHTML = '';
+
+            const daysOfWeek = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
+            daysOfWeek.forEach(day => {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'font-semibold text-sm text-gray-500 dark:text-gray-400';
+                dayEl.textContent = day;
+                grid.appendChild(dayEl);
+            });
+
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDayOfMonth; i++) {
+                grid.appendChild(document.createElement('div'));
+            }
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayEl = document.createElement('button');
+                dayEl.textContent = i;
+                dayEl.dataset.day = i;
+                const currentDate = new Date(year, month, i);
+                const dateStr = toISODateString(currentDate);
+
+                const daySupps = getSupplementsForDate(currentDate);
+                const historyEntry = AppState.history[dateStr] || {};
+                const takenCount = Object.values(historyEntry).filter(Boolean).length;
+                
+                let dayClasses = 'p-2 rounded-full aspect-square flex items-center justify-center transition-colors ';
+                if (daySupps.length > 0) {
+                    if (takenCount === daySupps.length) {
+                        dayClasses += 'bg-emerald-100 dark:bg-emerald-800 text-emerald-700 dark:text-emerald-200';
+                    } else if (takenCount > 0) {
+                         dayClasses += 'bg-yellow-100 dark:bg-yellow-800 text-yellow-700 dark:text-yellow-200';
+                    } else {
+                        dayClasses += 'hover:bg-gray-200 dark:hover:bg-gray-700';
+                    }
+                } else {
+                     dayClasses += 'text-gray-400';
+                }
+
+                if (toISODateString(AppState.currentDate) === dateStr) {
+                    dayClasses += ' ring-2 ring-emerald-500';
+                }
+                
+                dayEl.className = dayClasses;
+                grid.appendChild(dayEl);
+            }
+        }
+
+        function renderCalendarDayDetails(day) {
+            const date = new Date(AppState.calendarDate.getFullYear(), AppState.calendarDate.getMonth(), day);
+            const container = $('#calendar-day-details');
+            const supplements = getSupplementsForDate(date);
+            const dateStr = toISODateString(date);
+            const historyEntry = AppState.history[dateStr] || {};
+            
+            let html = `<div class="card p-4 fade-in"><h3 class="font-semibold mb-2">${formatDate(date)}</h3>`;
+            if (supplements.length > 0) {
+                html += '<ul class="space-y-2">';
+                supplements.forEach(sup => {
+                    const isTaken = historyEntry[sup.nombre];
+                    html += `
+                        <li class="flex items-center text-sm">
+                            <span class="material-icons-outlined text-base mr-2 ${isTaken ? 'text-emerald-500' : 'text-gray-400'}">
+                                ${isTaken ? 'check_circle' : 'radio_button_unchecked'}
+                            </span>
+                            <span>${sup.nombre}</span>
+                        </li>
+                    `;
+                });
+                html += '</ul>';
+            } else {
+                html += '<p class="text-sm text-gray-500">No hay suplementos para este día.</p>';
+            }
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+
+        function renderHistory() {
+            const monthPicker = $('#history-month-picker');
+            const logContainer = $('#history-log');
+            if(!monthPicker.value) {
+                monthPicker.value = AppState.currentDate.toISOString().slice(0, 7);
+            }
+            const [year, month] = monthPicker.value.split('-').map(Number);
+            
+            logContainer.innerHTML = '';
+            
+            const datesInMonth = Object.keys(AppState.history)
+                .filter(dateStr => dateStr.startsWith(monthPicker.value))
+                .sort();
+                
+            if (datesInMonth.length === 0) {
+                logContainer.innerHTML = '<p class="text-center text-gray-500 py-4">No hay registros para este mes.</p>';
+                return;
+            }
+
+            datesInMonth.forEach(dateStr => {
+                const date = new Date(dateStr + 'T00:00:00');
+                const supplementsForDay = getSupplementsForDate(date);
+                if (supplementsForDay.length === 0) return;
+
+                const historyEntry = AppState.history[dateStr] || {};
+                const dayEl = document.createElement('div');
+                dayEl.className = 'border-b dark:border-gray-700 pb-3';
+                let listHtml = '';
+                supplementsForDay.forEach(sup => {
+                    const isTaken = historyEntry[sup.nombre];
+                    listHtml += `
+                        <li class="flex items-center justify-between text-sm py-1">
+                            <span>${sup.nombre}</span>
+                            <span class="material-icons-outlined ${isTaken ? 'text-emerald-500' : 'text-red-500'}">${isTaken ? 'check' : 'close'}</span>
+                        </li>
+                    `;
+                });
+
+                dayEl.innerHTML = `
+                    <h4 class="font-semibold">${formatDate(date, {weekday: 'long', day: 'numeric', month: 'long'})}</h4>
+                    <ul class="mt-2">${listHtml}</ul>`;
+                logContainer.appendChild(dayEl);
+            });
+        }
+        
+        function renderManageView() {
+            const container = $('#phases-container');
+            container.innerHTML = '';
+            AppState.data.fases.forEach(phase => {
+                const phaseEl = document.createElement('div');
+                phaseEl.className = 'border dark:border-gray-700 rounded-lg p-4';
+                
+                let supplementsHtml = phase.suplementos.map((sup, index) => `
+                    <div class="flex justify-between items-center py-2 border-b dark:border-gray-600 last:border-b-0">
+                        <div>
+                            <p class="font-medium">${sup.nombre}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">${sup.dosis} - ${sup.horario}</p>
+                        </div>
+                        <div>
+                            <button class="edit-supplement-btn p-1 hover:text-blue-500" data-phase-id="${phase.id}" data-supplement-index="${index}"><span class="material-icons-outlined">edit</span></button>
+                            <button class="delete-supplement-btn p-1 hover:text-red-500" data-phase-id="${phase.id}" data-supplement-index="${index}"><span class="material-icons-outlined">delete</span></button>
+                        </div>
+                    </div>
+                `).join('');
+
+                phaseEl.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <div>
+                            <h3 class="text-lg font-bold">${phase.nombre}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">${formatDate(new Date(phase.inicio + 'T00:00:00'))} - ${formatDate(new Date(phase.fin + 'T00:00:00'))}</p>
+                        </div>
+                        <div>
+                           <button class="edit-phase-btn p-1 hover:text-blue-500" data-phase-id="${phase.id}"><span class="material-icons-outlined">edit</span></button>
+                           <button class="delete-phase-btn p-1 hover:text-red-500" data-phase-id="${phase.id}"><span class="material-icons-outlined">delete</span></button>
+                        </div>
+                    </div>
+                    <div class="space-y-2">${supplementsHtml}</div>
+                    <button class="add-supplement-btn w-full mt-4 text-sm bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-200 py-2 rounded-md hover:bg-emerald-200 dark:hover:bg-emerald-800" data-phase-id="${phase.id}">Agregar Suplemento</button>
+                `;
+                container.appendChild(phaseEl);
+            });
+        }
+
+        // --- MANEJADORES DE EVENTOS ---
+        function setupEventListeners() {
+            // Navegación
+            $$('.nav-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    AppState.activeView = button.dataset.view;
+                    render();
+                });
+            });
+
+            // Toggle de Tema
+            $('#theme-toggle').addEventListener('click', toggleTheme);
+
+            // Dashboard: Marcar suplemento
+            $('#today-supplements').addEventListener('change', (e) => {
+                if (e.target.type === 'checkbox') {
+                    const supplementName = e.target.dataset.name;
+                    const dateStr = toISODateString(AppState.currentDate);
+                    if (!AppState.history[dateStr]) {
+                        AppState.history[dateStr] = {};
+                    }
+                    AppState.history[dateStr][supplementName] = e.target.checked;
+                    saveState();
+                    render();
+                }
+            });
+
+            // Calendario
+            $('#prev-month').addEventListener('click', () => {
+                AppState.calendarDate.setMonth(AppState.calendarDate.getMonth() - 1);
+                renderCalendar();
+                 $('#calendar-day-details').innerHTML = '';
+            });
+            $('#next-month').addEventListener('click', () => {
+                AppState.calendarDate.setMonth(AppState.calendarDate.getMonth() + 1);
+                renderCalendar();
+                 $('#calendar-day-details').innerHTML = '';
+            });
+            $('#calendar-grid').addEventListener('click', (e) => {
+                if (e.target.dataset.day) {
+                    renderCalendarDayDetails(parseInt(e.target.dataset.day));
+                }
+            });
+
+            // Historial
+            $('#history-month-picker').addEventListener('change', renderHistory);
+            $('#export-csv').addEventListener('click', exportHistoryToCSV);
+
+            // Gestión: Modales y acciones
+            $('#manage-view').addEventListener('click', handleManageViewClicks);
+            
+            // Modal de suplementos
+            $('#supplement-form').addEventListener('submit', handleSupplementFormSubmit);
+            $('#cancel-modal').addEventListener('click', () => $('#supplement-modal').classList.add('hidden'));
+
+            // Modal de fases
+            $('#add-phase-btn').addEventListener('click', handleAddPhaseClick);
+            $('#phase-form').addEventListener('submit', handlePhaseFormSubmit);
+            $('#cancel-phase-modal').addEventListener('click', () => $('#phase-modal').classList.add('hidden'));
+
+            // Carga de JSON
+            $('#json-upload').addEventListener('change', handleJsonUpload);
+        }
+
+        function handleManageViewClicks(e) {
+            const button = e.target.closest('button');
+            if (!button) return;
+
+            const phaseId = parseInt(button.dataset.phaseId);
+            const supplementIndex = button.dataset.supplementIndex ? parseInt(button.dataset.supplementIndex) : -1;
+
+            if (button.classList.contains('add-supplement-btn')) {
+                openSupplementModal({ phaseId });
+            } else if (button.classList.contains('edit-supplement-btn')) {
+                openSupplementModal({ phaseId, supplementIndex });
+            } else if (button.classList.contains('delete-supplement-btn')) {
+                if (confirm('¿Estás seguro de que quieres eliminar este suplemento?')) {
+                    AppState.data.fases.find(p => p.id === phaseId).suplementos.splice(supplementIndex, 1);
+                    saveState();
+                    render();
+                }
+            } else if (button.classList.contains('edit-phase-btn')) {
+                openPhaseModal(phaseId);
+            } else if (button.classList.contains('delete-phase-btn')) {
+                if (confirm('¿Estás seguro de que quieres eliminar esta fase y todos sus suplementos?')) {
+                    AppState.data.fases = AppState.data.fases.filter(p => p.id !== phaseId);
+                    saveState();
+                    render();
+                }
+            }
+        }
+
+        // --- Lógica de Modales ---
+        function openSupplementModal({ phaseId, supplementIndex = -1 }) {
+            const form = $('#supplement-form');
+            form.reset();
+            $('#modal-phase-id').value = phaseId;
+            $('#modal-supplement-index').value = supplementIndex;
+            
+            if (supplementIndex > -1) {
+                const supplement = AppState.data.fases.find(p => p.id === phaseId).suplementos[supplementIndex];
+                $('#modal-title').textContent = 'Editar Suplemento';
+                $('#supplement-name').value = supplement.nombre;
+                $('#supplement-dosis').value = supplement.dosis;
+                $('#supplement-horario').value = supplement.horario;
+            } else {
+                $('#modal-title').textContent = 'Agregar Suplemento';
+            }
+            $('#supplement-modal').classList.remove('hidden');
+        }
+
+        function handleSupplementFormSubmit(e) {
+            e.preventDefault();
+            const phaseId = parseInt($('#modal-phase-id').value);
+            const supplementIndex = parseInt($('#modal-supplement-index').value);
+            const phase = AppState.data.fases.find(p => p.id === phaseId);
+            
+            const newSupplement = {
+                nombre: $('#supplement-name').value,
+                dosis: $('#supplement-dosis').value,
+                horario: $('#supplement-horario').value
+            };
+            
+            if (supplementIndex > -1) {
+                phase.suplementos[supplementIndex] = newSupplement;
+            } else {
+                phase.suplementos.push(newSupplement);
+            }
+            
+            saveState();
+            render();
+            $('#supplement-modal').classList.add('hidden');
+        }
+
+        function openPhaseModal(phaseId = -1) {
+            const form = $('#phase-form');
+            form.reset();
+            $('#modal-phase-edit-id').value = phaseId;
+
+            if (phaseId > -1) {
+                const phase = AppState.data.fases.find(p => p.id === phaseId);
+                $('#phase-modal-title').textContent = 'Editar Fase';
+                $('#phase-name').value = phase.nombre;
+                $('#phase-start').value = phase.inicio;
+                $('#phase-end').value = phase.fin;
+            } else {
+                $('#phase-modal-title').textContent = 'Agregar Nueva Fase';
+            }
+            $('#phase-modal').classList.remove('hidden');
+        }
+
+        function handleAddPhaseClick() {
+            openPhaseModal();
+        }
+
+        function handlePhaseFormSubmit(e) {
+            e.preventDefault();
+            const phaseId = parseInt($('#modal-phase-edit-id').value);
+            const newPhaseData = {
+                nombre: $('#phase-name').value,
+                inicio: $('#phase-start').value,
+                fin: $('#phase-end').value
+            };
+
+            if (phaseId > -1) {
+                const phaseIndex = AppState.data.fases.findIndex(p => p.id === phaseId);
+                AppState.data.fases[phaseIndex] = { ...AppState.data.fases[phaseIndex], ...newPhaseData };
+            } else {
+                const newId = AppState.data.fases.length > 0 ? Math.max(...AppState.data.fases.map(p => p.id)) + 1 : 0;
+                AppState.data.fases.push({
+                    id: newId,
+                    ...newPhaseData,
+                    suplementos: []
+                });
+            }
+            
+            saveState();
+            render();
+            $('#phase-modal').classList.add('hidden');
+        }
+
+        // --- FUNCIONES EXTRA ---
+        function applyTheme() {
+            if (AppState.settings.theme === 'dark') {
+                document.documentElement.classList.add('dark');
+                $('#theme-icon').textContent = 'dark_mode';
+            } else {
+                document.documentElement.classList.remove('dark');
+                $('#theme-icon').textContent = 'light_mode';
+            }
+        }
+
+        function toggleTheme() {
+            AppState.settings.theme = AppState.settings.theme === 'light' ? 'dark' : 'light';
+            saveState();
+            applyTheme();
+        }
+
+        function handleJsonUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const content = JSON.parse(e.target.result);
+                    if (content.fases && Array.isArray(content.fases)) {
+                        // Aquí se podría implementar una lógica de fusión más compleja,
+                        // por ahora, simplemente reemplaza los datos.
+                        AppState.data = content;
+                        saveState();
+                        render();
+                        alert('Datos cargados correctamente.');
+                    } else {
+                        alert('El archivo JSON no tiene el formato esperado.');
+                    }
+                } catch (error) {
+                    alert('Error al leer el archivo JSON.');
+                    console.error(error);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function exportHistoryToCSV() {
+            const monthValue = $('#history-month-picker').value;
+            const headers = ['Fecha', 'Suplemento', 'Dosis', 'Horario Programado', 'Tomado'];
+            let csvContent = "data:text/csv;charset=utf-8," + headers.join(',') + '\n';
+            
+            const datesInMonth = Object.keys(AppState.history)
+                .filter(dateStr => dateStr.startsWith(monthValue))
+                .sort();
+            
+            datesInMonth.forEach(dateStr => {
+                const date = new Date(dateStr + 'T00:00:00');
+                const supplementsForDay = getSupplementsForDate(date);
+                const historyEntry = AppState.history[dateStr] || {};
+                
+                supplementsForDay.forEach(sup => {
+                    const row = [
+                        dateStr,
+                        `"${sup.nombre}"`,
+                        `"${sup.dosis}"`,
+                        `"${sup.horario}"`,
+                        historyEntry[sup.nombre] ? 'Si' : 'No'
+                    ].join(',');
+                    csvContent += row + '\n';
+                });
+            });
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `historial_suplementos_${monthValue}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // --- INICIALIZACIÓN ---
+        function init() {
+            loadState();
+            setupEventListeners();
+            render();
+            // PWA Service Worker Registration
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js').then(function(registration) {
+                    console.log('Service Worker registrado con éxito:', registration);
+                }).catch(function(error) {
+                    console.log('Error en el registro del Service Worker:', error);
+                });
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
