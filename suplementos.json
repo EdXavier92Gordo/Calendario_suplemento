@@ -13,8 +13,8 @@
         { "nombre": "Omega-3", "dosis": "1 cápsula", "horario": "13h00 (almuerzo)" },
         { "nombre": "Ashwagandha", "dosis": "1 cápsula", "horario": "18h30 (merienda)" },
         { "nombre": "Magnesio", "dosis": "1 cápsula", "horario": "21h00 (noche)" },
-        { "nombre": "Proteína Fresubin", "dosis": "2 scoops", "horario": "mañana y noche" },
-        { "nombre": "Pepti Lagen", "dosis": "1 sobre", "horario": "media mañana y media tarde" }
+        { "nombre": "Proteína Fresubin", "dosis": "2 scoops", "horario": "mañana" },
+        { "nombre": "Pepti Lagen", "dosis": "2 sobres", "horario": "media tarde" }
       ]
     },
     {
@@ -23,9 +23,18 @@
       "inicio": "2025-09-30",
       "fin": "2025-10-31",
       "suplementos": [
+        { "nombre": "Probiótico", "dosis": "1 cápsula", "horario": "07h00 (ayunas)" },
+        { "nombre": "Complejo B", "dosis": "1 tableta", "horario": "07h30 (desayuno)" },
+        { "nombre": "Zinc", "dosis": "1 cápsula", "horario": "07h30 (desayuno)" },
         { "nombre": "Vitamina C natural (acerola/camu camu)", "dosis": "500 mg", "horario": "07h30 (desayuno)" },
+        { "nombre": "Proteína Fresubin", "dosis": "2 scoops", "horario": "mañana" },
         { "nombre": "Cardo Mariano", "dosis": "200–400 mg", "horario": "13h00 (almuerzo)" },
-        { "nombre": "Nux vomica 30CH", "dosis": "5 glóbulos", "horario": "16h00 (tarde) y 21h00 (noche)" }
+        { "nombre": "Omega-3", "dosis": "1 cápsula", "horario": "13h00 (almuerzo)" },
+        { "nombre": "Pepti Lagen", "dosis": "2 sobres", "horario": "media tarde" },
+        { "nombre": "Nux vomica 30CH", "dosis": "3 glóbulos", "horario": "16h00 (tarde)" },
+        { "nombre": "Ashwagandha", "dosis": "1 cápsula", "horario": "18h30 (merienda)" },
+        { "nombre": "Magnesio", "dosis": "1 cápsula", "horario": "21h00 (noche)" },
+        { "nombre": "Nux vomica 30CH", "dosis": "2 glóbulos", "horario": "21h00 (noche)" }
       ]
     },
     {
@@ -34,8 +43,16 @@
       "inicio": "2025-11-01",
       "fin": "2025-11-30",
       "suplementos": [
+        { "nombre": "Probiótico", "dosis": "1 cápsula", "horario": "07h00 (ayunas)" },
+        { "nombre": "Complejo B", "dosis": "1 tableta", "horario": "07h30 (desayuno)" },
+        { "nombre": "Zinc", "dosis": "1 cápsula", "horario": "07h30 (desayuno)" },
+        { "nombre": "Proteína Fresubin", "dosis": "2 scoops", "horario": "mañana" },
+        { "nombre": "Omega-3", "dosis": "1 cápsula", "horario": "13h00 (almuerzo)" },
         { "nombre": "Saw Palmetto (Serenoa repens)", "dosis": "320 mg", "horario": "13h00 (almuerzo)" },
-        { "nombre": "Crataegus (espino blanco)", "dosis": "30 gotas o 300 mg", "horario": "18h30 (merienda o noche)" }
+        { "nombre": "Pepti Lagen", "dosis": "2 sobres", "horario": "media tarde" },
+        { "nombre": "Crataegus (espino blanco)", "dosis": "30 gotas o 300 mg", "horario": "18h30 (merienda o noche)" },
+        { "nombre": "Ashwagandha", "dosis": "1 cápsula", "horario": "18h30 (merienda)" },
+        { "nombre": "Magnesio", "dosis": "1 cápsula", "horario": "21h00 (noche)" }
       ]
     },
     {
@@ -44,8 +61,16 @@
       "inicio": "2025-12-01",
       "fin": "2025-12-31",
       "suplementos": [
+        { "nombre": "Probiótico", "dosis": "1 cápsula", "horario": "07h00 (ayunas)" },
+        { "nombre": "Complejo B", "dosis": "1 tableta", "horario": "07h30 (desayuno)" },
+        { "nombre": "Zinc", "dosis": "1 cápsula", "horario": "07h30 (desayuno)" },
         { "nombre": "Maca andina", "dosis": "2–3 g", "horario": "07h30 (desayuno)" },
-        { "nombre": "Spirulina", "dosis": "2–4 g", "horario": "10h30 (media mañana)" }
+        { "nombre": "Proteína Fresubin", "dosis": "2 scoops", "horario": "mañana" },
+        { "nombre": "Spirulina", "dosis": "2–4 g", "horario": "10h30 (media mañana)" },
+        { "nombre": "Omega-3", "dosis": "1 cápsula", "horario": "13h00 (almuerzo)" },
+        { "nombre": "Pepti Lagen", "dosis": "2 sobres", "horario": "media tarde" },
+        { "nombre": "Ashwagandha", "dosis": "1 cápsula", "horario": "18h30 (merienda)" },
+        { "nombre": "Magnesio", "dosis": "1 cápsula", "horario": "21h00 (noche)" }
       ]
     }
   ]
