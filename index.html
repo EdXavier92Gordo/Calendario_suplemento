@@ -160,11 +160,21 @@
                     <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Sube un archivo JSON para agregar o actualizar fases y suplementos.</p>
                     <input type="file" id="json-upload" accept=".json" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"/>
                  </div>
+                 <div class="card p-6">
+                    <h2 class="text-xl font-semibold mb-4 text-red-600 dark:text-red-400">Zona de Peligro</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                        Esto eliminará permanentemente todo tu historial y cualquier cambio que hayas hecho. La aplicación volverá a su estado inicial.
+                    </p>
+                    <button id="reset-app-btn" class="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 flex items-center justify-center gap-2">
+                        <span class="material-icons-outlined">delete_forever</span>
+                        Resetear Aplicación
+                    </button>
+                </div>
             </div>
         </main>
     </div>
 
-    <!-- Modal para editar/agregar suplemento -->
+    <!-- Modales -->
     <div id="supplement-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
         <div class="card p-6 w-full max-w-md">
             <h2 id="modal-title" class="text-lg font-bold mb-4"></h2>
@@ -191,7 +201,6 @@
         </div>
     </div>
     
-    <!-- Modal para editar/agregar fase -->
     <div id="phase-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
         <div class="card p-6 w-full max-w-md">
             <h2 id="phase-modal-title" class="text-lg font-bold mb-4"></h2>
@@ -217,50 +226,23 @@
         </div>
     </div>
 
+    <div id="reset-confirm-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
+        <div class="card p-6 w-full max-w-md text-center">
+            <span class="material-icons-outlined text-5xl text-red-500 mx-auto mb-4">warning_amber</span>
+            <h2 class="text-lg font-bold mb-2">¿Estás realmente seguro?</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                Esta acción es irreversible y eliminará todo tu historial y personalizaciones. La aplicación volverá a su estado inicial.
+            </p>
+            <div class="flex justify-center gap-4">
+                <button id="cancel-reset-btn" class="py-2 px-6 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600">Cancelar</button>
+                <button id="confirm-reset-btn" class="bg-red-500 text-white py-2 px-6 rounded-md hover:bg-red-600">Sí, Resetear</button>
+            </div>
+        </div>
+    </div>
+
 
     <script type="module">
-        // --- CONFIGURACIÓN INICIAL Y DATOS POR DEFECTO ---
-        const initialData = {
-          "fases": [
-            {
-              "id": 0, "nombre": "Fase 0", "inicio": "2025-09-22", "fin": "2025-09-29",
-              "suplementos": [
-                { "nombre": "Probiótico", "dosis": "1 cápsula", "horario": "07h00 (ayunas)" },
-                { "nombre": "Complejo B", "dosis": "1 tableta", "horario": "07h30 (desayuno)" },
-                { "nombre": "Zinc", "dosis": "1 cápsula", "horario": "07h30 (desayuno)" },
-                { "nombre": "Aceite de hígado de bacalao", "dosis": "1 cápsula", "horario": "07h30 (desayuno o almuerzo)" },
-                { "nombre": "Omega-3", "dosis": "1 cápsula", "horario": "13h00 (almuerzo)" },
-                { "nombre": "Ashwagandha", "dosis": "1 cápsula", "horario": "18h30 (merienda)" },
-                { "nombre": "Magnesio", "dosis": "1 cápsula", "horario": "21h00 (noche)" },
-                { "nombre": "Proteína Fresubin", "dosis": "2 scoops", "horario": "mañana y noche" },
-                { "nombre": "Pepti Lagen", "dosis": "1 sobre", "horario": "media mañana y media tarde" }
-              ]
-            },
-            {
-              "id": 1, "nombre": "Fase 1", "inicio": "2025-09-30", "fin": "2025-10-31",
-              "suplementos": [
-                { "nombre": "Vitamina C natural (acerola/camu camu)", "dosis": "500 mg", "horario": "07h30 (desayuno)" },
-                { "nombre": "Cardo Mariano", "dosis": "200–400 mg", "horario": "13h00 (almuerzo)" },
-                { "nombre": "Nux vomica 30CH", "dosis": "5 glóbulos", "horario": "16h00 (tarde) y 21h00 (noche)" }
-              ]
-            },
-            {
-              "id": 2, "nombre": "Fase 2", "inicio": "2025-11-01", "fin": "2025-11-30",
-              "suplementos": [
-                { "nombre": "Saw Palmetto (Serenoa repens)", "dosis": "320 mg", "horario": "13h00 (almuerzo)" },
-                { "nombre": "Crataegus (espino blanco)", "dosis": "30 gotas o 300 mg", "horario": "18h30 (merienda o noche)" }
-              ]
-            },
-            {
-              "id": 3, "nombre": "Fase 3", "inicio": "2025-12-01", "fin": "2025-12-31",
-              "suplementos": [
-                { "nombre": "Maca andina", "dosis": "2–3 g", "horario": "07h30 (desayuno)" },
-                { "nombre": "Spirulina", "dosis": "2–4 g", "horario": "10h30 (media mañana)" }
-              ]
-            }
-          ]
-        };
-
+        // --- ESTADO DE LA APLICACIÓN ---
         const AppState = {
             data: { fases: [] },
             history: {},
@@ -268,8 +250,8 @@
                 theme: 'light',
                 notifications: false
             },
-            currentDate: new Date('2025-09-22T10:00:00'), // For demonstration purposes
-            calendarDate: new Date('2025-09-22T10:00:00'),
+            currentDate: new Date(),
+            calendarDate: new Date(),
             activeView: 'dashboard'
         };
         
@@ -286,7 +268,7 @@
             }));
         }
 
-        function loadState() {
+        async function loadState() {
             const savedState = localStorage.getItem('supplementApp');
             if (savedState) {
                 const parsed = JSON.parse(savedState);
@@ -294,9 +276,17 @@
                 AppState.history = parsed.history;
                 AppState.settings = parsed.settings;
             } else {
-                AppState.data = JSON.parse(JSON.stringify(initialData));
-                AppState.history = {};
-                AppState.settings = { theme: 'light', notifications: false };
+                try {
+                    const response = await fetch('suplementos.json');
+                    if (!response.ok) throw new Error('Error al cargar el archivo de datos.');
+                    const initialData = await response.json();
+                    AppState.data = initialData;
+                    AppState.history = {};
+                    AppState.settings = { theme: 'light', notifications: false };
+                } catch (error) {
+                    console.error('No se pudieron cargar los datos iniciales:', error);
+                    // No mostraremos alert, el usuario verá la app vacía
+                }
             }
         }
 
@@ -305,7 +295,10 @@
             return date.toLocaleDateString('es-ES', options);
         }
         function toISODateString(date) {
-            return date.toISOString().split('T')[0];
+            // Ajuste para obtener la fecha local en formato ISO sin problemas de zona horaria
+            const tzoffset = date.getTimezoneOffset() * 60000;
+            const localISOTime = (new Date(date - tzoffset)).toISOString().slice(0, 10);
+            return localISOTime;
         }
 
         // --- LÓGICA PRINCIPAL DE LA APLICACIÓN ---
@@ -327,7 +320,6 @@
             renderManageView();
             applyTheme();
             
-            // Actualizar la vista activa
             $$('.view').forEach(v => v.classList.add('hidden'));
             $(`#${AppState.activeView}-view`).classList.remove('hidden');
 
@@ -503,7 +495,7 @@
             }
 
             datesInMonth.forEach(dateStr => {
-                const date = new Date(dateStr + 'T00:00:00');
+                const date = new Date(dateStr + 'T12:00:00Z'); // Use T12:00:00Z to avoid timezone issues
                 const supplementsForDay = getSupplementsForDate(date);
                 if (supplementsForDay.length === 0) return;
 
@@ -531,7 +523,8 @@
         function renderManageView() {
             const container = $('#phases-container');
             container.innerHTML = '';
-            AppState.data.fases.forEach(phase => {
+            if (!AppState.data.fases) AppState.data.fases = [];
+            AppState.data.fases.sort((a,b) => new Date(a.inicio) - new Date(b.inicio)).forEach(phase => {
                 const phaseEl = document.createElement('div');
                 phaseEl.className = 'border dark:border-gray-700 rounded-lg p-4';
                 
@@ -552,7 +545,7 @@
                     <div class="flex justify-between items-center mb-2">
                         <div>
                             <h3 class="text-lg font-bold">${phase.nombre}</h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">${formatDate(new Date(phase.inicio + 'T00:00:00'))} - ${formatDate(new Date(phase.fin + 'T00:00:00'))}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">${formatDate(new Date(phase.inicio + 'T12:00:00Z'))} - ${formatDate(new Date(phase.fin + 'T12:00:00Z'))}</p>
                         </div>
                         <div>
                            <button class="edit-phase-btn p-1 hover:text-blue-500" data-phase-id="${phase.id}"><span class="material-icons-outlined">edit</span></button>
@@ -568,18 +561,13 @@
 
         // --- MANEJADORES DE EVENTOS ---
         function setupEventListeners() {
-            // Navegación
             $$('.nav-button').forEach(button => {
                 button.addEventListener('click', () => {
                     AppState.activeView = button.dataset.view;
                     render();
                 });
             });
-
-            // Toggle de Tema
             $('#theme-toggle').addEventListener('click', toggleTheme);
-
-            // Dashboard: Marcar suplemento
             $('#today-supplements').addEventListener('change', (e) => {
                 if (e.target.type === 'checkbox') {
                     const supplementName = e.target.dataset.name;
@@ -592,8 +580,6 @@
                     render();
                 }
             });
-
-            // Calendario
             $('#prev-month').addEventListener('click', () => {
                 AppState.calendarDate.setMonth(AppState.calendarDate.getMonth() - 1);
                 renderCalendar();
@@ -609,25 +595,20 @@
                     renderCalendarDayDetails(parseInt(e.target.dataset.day));
                 }
             });
-
-            // Historial
             $('#history-month-picker').addEventListener('change', renderHistory);
             $('#export-csv').addEventListener('click', exportHistoryToCSV);
-
-            // Gestión: Modales y acciones
             $('#manage-view').addEventListener('click', handleManageViewClicks);
-            
-            // Modal de suplementos
             $('#supplement-form').addEventListener('submit', handleSupplementFormSubmit);
             $('#cancel-modal').addEventListener('click', () => $('#supplement-modal').classList.add('hidden'));
-
-            // Modal de fases
             $('#add-phase-btn').addEventListener('click', handleAddPhaseClick);
             $('#phase-form').addEventListener('submit', handlePhaseFormSubmit);
             $('#cancel-phase-modal').addEventListener('click', () => $('#phase-modal').classList.add('hidden'));
-
-            // Carga de JSON
             $('#json-upload').addEventListener('change', handleJsonUpload);
+            
+            // Eventos para el reseteo
+            $('#reset-app-btn').addEventListener('click', () => $('#reset-confirm-modal').classList.remove('hidden'));
+            $('#cancel-reset-btn').addEventListener('click', () => $('#reset-confirm-modal').classList.add('hidden'));
+            $('#confirm-reset-btn').addEventListener('click', handleResetApp);
         }
 
         function handleManageViewClicks(e) {
@@ -642,23 +623,26 @@
             } else if (button.classList.contains('edit-supplement-btn')) {
                 openSupplementModal({ phaseId, supplementIndex });
             } else if (button.classList.contains('delete-supplement-btn')) {
-                if (confirm('¿Estás seguro de que quieres eliminar este suplemento?')) {
-                    AppState.data.fases.find(p => p.id === phaseId).suplementos.splice(supplementIndex, 1);
-                    saveState();
-                    render();
-                }
+                // Se usará un modal de confirmación en el futuro si se desea
+                AppState.data.fases.find(p => p.id === phaseId).suplementos.splice(supplementIndex, 1);
+                saveState();
+                render();
             } else if (button.classList.contains('edit-phase-btn')) {
                 openPhaseModal(phaseId);
             } else if (button.classList.contains('delete-phase-btn')) {
-                if (confirm('¿Estás seguro de que quieres eliminar esta fase y todos sus suplementos?')) {
-                    AppState.data.fases = AppState.data.fases.filter(p => p.id !== phaseId);
-                    saveState();
-                    render();
-                }
+                // Se usará un modal de confirmación en el futuro si se desea
+                AppState.data.fases = AppState.data.fases.filter(p => p.id !== phaseId);
+                saveState();
+                render();
             }
         }
+        
+        function handleResetApp() {
+            localStorage.removeItem('supplementApp');
+            $('#reset-confirm-modal').classList.add('hidden');
+            location.reload();
+        }
 
-        // --- Lógica de Modales ---
         function openSupplementModal({ phaseId, supplementIndex = -1 }) {
             const form = $('#supplement-form');
             form.reset();
@@ -747,7 +731,6 @@
             $('#phase-modal').classList.add('hidden');
         }
 
-        // --- FUNCIONES EXTRA ---
         function applyTheme() {
             if (AppState.settings.theme === 'dark') {
                 document.documentElement.classList.add('dark');
@@ -773,18 +756,12 @@
                 try {
                     const content = JSON.parse(e.target.result);
                     if (content.fases && Array.isArray(content.fases)) {
-                        // Aquí se podría implementar una lógica de fusión más compleja,
-                        // por ahora, simplemente reemplaza los datos.
                         AppState.data = content;
                         saveState();
                         render();
-                        alert('Datos cargados correctamente.');
-                    } else {
-                        alert('El archivo JSON no tiene el formato esperado.');
                     }
                 } catch (error) {
-                    alert('Error al leer el archivo JSON.');
-                    console.error(error);
+                    console.error('Error al leer el archivo JSON.', error);
                 }
             };
             reader.readAsText(file);
@@ -800,7 +777,7 @@
                 .sort();
             
             datesInMonth.forEach(dateStr => {
-                const date = new Date(dateStr + 'T00:00:00');
+                const date = new Date(dateStr + 'T12:00:00Z');
                 const supplementsForDay = getSupplementsForDate(date);
                 const historyEntry = AppState.history[dateStr] || {};
                 
@@ -826,11 +803,10 @@
         }
 
         // --- INICIALIZACIÓN ---
-        function init() {
-            loadState();
+        async function init() {
+            await loadState();
             setupEventListeners();
             render();
-            // PWA Service Worker Registration
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('sw.js').then(function(registration) {
                     console.log('Service Worker registrado con éxito:', registration);
@@ -844,3 +820,4 @@
     </script>
 </body>
 </html>
+
