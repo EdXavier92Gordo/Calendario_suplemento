@@ -10,10 +10,10 @@
         { "nombre": "Complejo B", "dosis": "1 tableta", "horario": "07h30 (desayuno)" },
         { "nombre": "Zinc", "dosis": "1 cápsula", "horario": "07h30 (desayuno)" },
         { "nombre": "Aceite de hígado de bacalao", "dosis": "1 cápsula", "horario": "07h30 (desayuno o almuerzo)" },
+        { "nombre": "Proteína Fresubin", "dosis": "2 scoops", "horario": "mañana" },
         { "nombre": "Omega-3", "dosis": "1 cápsula", "horario": "13h00 (almuerzo)" },
         { "nombre": "Ashwagandha", "dosis": "1 cápsula", "horario": "18h30 (merienda)" },
         { "nombre": "Magnesio", "dosis": "1 cápsula", "horario": "21h00 (noche)" },
-        { "nombre": "Proteína Fresubin", "dosis": "2 scoops", "horario": "mañana" },
         { "nombre": "Pepti Lagen", "dosis": "2 sobres", "horario": "media tarde" }
       ]
     },
@@ -75,3 +75,4 @@
     }
   ]
 }
+
