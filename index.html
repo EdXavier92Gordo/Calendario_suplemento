@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Registro de Salud</title>
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Chart.js para gráficas -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 
     <!-- Google Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kalam:wght@300;400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kalam:wght@300;400&display=swap"
+        rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 
     <style>
@@ -24,6 +28,7 @@
             font-family: 'Inter', sans-serif;
             transition: background-color 0.3s, color 0.3s;
         }
+
         .dark {
             --bg-color: #1f2937;
             --bg-secondary-color: #374151;
@@ -31,10 +36,12 @@
             --text-secondary-color: #d1d5db;
             --border-color: #4b5563;
         }
+
         html.dark body {
             background-color: var(--bg-color);
             color: var(--text-color);
         }
+
         /* Clases personalizadas */
         .card {
             background-color: white;
@@ -42,57 +49,141 @@
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             transition: background-color 0.3s;
         }
+
         .dark .card {
             background-color: var(--bg-secondary-color);
             border: 1px solid var(--border-color);
         }
+
         .nav-button {
             transition: all 0.2s ease-in-out;
             white-space: nowrap;
         }
+
         .nav-button.active {
-            background-color: #10b981; /* emerald-500 */
+            background-color: #10b981;
+            /* emerald-500 */
             color: white;
         }
+
         .dark .nav-button.active {
-            background-color: #34d399; /* emerald-400 */
-        }
-        /* Animaciones */
-        .fade-in { animation: fadeIn 0.5s ease-in-out; }
-        .fade-out { animation: fadeOut 0.5s ease-in-out forwards; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeOut {
-            from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(10px); visibility: hidden; }
+            background-color: #34d399;
+            /* emerald-400 */
         }
 
-        .material-icons-outlined { font-size: 1.25rem; }
-        
+        /* Animaciones */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(10px);
+                visibility: hidden;
+            }
+        }
+
+        .material-icons-outlined {
+            font-size: 1.25rem;
+        }
+
         /* Estilos para el Toggle Switch */
-        .toggle-checkbox:checked { right: 0; border-color: #34d399; }
-        .toggle-checkbox:checked + .toggle-label { background-color: #34d399; }
-        
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #34d399;
+        }
+
+        .toggle-checkbox:checked+.toggle-label {
+            background-color: #34d399;
+        }
+
         .nav-container {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
         }
-        .nav-container::-webkit-scrollbar { display: none; }
-        
+
+        .nav-container::-webkit-scrollbar {
+            display: none;
+        }
+
         /* Estilos para el calendario de reporte (Termómetro de Alegría) */
-        .day-joy { background-color: #6ee7b7; color: #064e3b; } /* emerald-300 */
-        .dark .day-joy { background-color: #047857; color: #d1fae5;}
-        .day-happy { background-color: #a7f3d0; color: #065f46;} /* emerald-200 */
-        .dark .day-happy { background-color: #065f46; color: #d1fae5;}
-        .day-neutral { background-color: #fde047; color: #78350f;} /* yellow-300 */
-        .dark .day-neutral { background-color: #a16207; color: #fefce8;}
-        .day-sad { background-color: #fca5a5; color: #7f1d1d;} /* red-300 */
-        .dark .day-sad { background-color: #991b1b; color: #fee2e2;}
-        .day-bad { background-color: #ef4444; color: #fee2e2;} /* red-500 */
-        .dark .day-bad { background-color: #7f1d1d; color: #fee2e2;}
+        .day-joy {
+            background-color: #6ee7b7;
+            color: #064e3b;
+        }
+
+        /* emerald-300 */
+        .dark .day-joy {
+            background-color: #047857;
+            color: #d1fae5;
+        }
+
+        .day-happy {
+            background-color: #a7f3d0;
+            color: #065f46;
+        }
+
+        /* emerald-200 */
+        .dark .day-happy {
+            background-color: #065f46;
+            color: #d1fae5;
+        }
+
+        .day-neutral {
+            background-color: #fde047;
+            color: #78350f;
+        }
+
+        /* yellow-300 */
+        .dark .day-neutral {
+            background-color: #a16207;
+            color: #fefce8;
+        }
+
+        .day-sad {
+            background-color: #fca5a5;
+            color: #7f1d1d;
+        }
+
+        /* red-300 */
+        .dark .day-sad {
+            background-color: #991b1b;
+            color: #fee2e2;
+        }
+
+        .day-bad {
+            background-color: #ef4444;
+            color: #fee2e2;
+        }
+
+        /* red-500 */
+        .dark .day-bad {
+            background-color: #7f1d1d;
+            color: #fee2e2;
+        }
 
         /* Estilos para la vista de Bienvenida */
         #splash-view {
@@ -100,11 +191,13 @@
             background-size: cover;
             background-position: center;
         }
+
         #splash-view .overlay {
             background-color: rgba(255, 255, 255, 0.7);
         }
+
         .dark #splash-view .overlay {
-             background-color: rgba(31, 41, 55, 0.7);
+            background-color: rgba(31, 41, 55, 0.7);
         }
 
         /* Estilos para el Diario */
@@ -115,6 +208,7 @@
             background-image: repeating-linear-gradient(to bottom, #e5e7eb 0, #e5e7eb 1px, transparent 1px, transparent 1.75rem);
             line-height: 1.75rem;
         }
+
         .dark .journal-paper {
             background-color: #4b5563;
             color: #e5e7eb;
@@ -122,6 +216,7 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
 
     <!-- Vista de Bienvenida (Splash Screen) -->
@@ -129,9 +224,11 @@
         <div class="overlay absolute inset-0"></div>
         <div class="relative z-10 flex flex-col items-center justify-center h-full p-8 text-center">
             <div class="fade-in">
-                <h1 class="text-4xl md:text-5xl font-bold text-emerald-700 dark:text-emerald-300 mb-4">Mi Registro de Salud</h1>
+                <h1 class="text-4xl md:text-5xl font-bold text-emerald-700 dark:text-emerald-300 mb-4">Mi Registro de
+                    Salud</h1>
                 <p id="welcome-message" class="text-xl text-gray-700 dark:text-gray-300 mb-8 max-w-2xl mx-auto"></p>
-                <button id="enter-app-btn" class="bg-emerald-500 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-emerald-600 transition-transform transform hover:scale-105">
+                <button id="enter-app-btn"
+                    class="bg-emerald-500 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-emerald-600 transition-transform transform hover:scale-105">
                     Continuar
                 </button>
             </div>
@@ -146,10 +243,12 @@
         <header class="flex justify-between items-center mb-6">
             <h1 class="text-2xl md:text-3xl font-bold text-emerald-600 dark:text-emerald-400">Mi Registro de Salud</h1>
             <div class="flex items-center gap-2">
-                <button id="home-btn" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                <button id="home-btn"
+                    class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
                     <span class="material-icons-outlined">home</span>
                 </button>
-                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                <button id="theme-toggle"
+                    class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
                     <span class="material-icons-outlined" id="theme-icon">light_mode</span>
                 </button>
             </div>
@@ -158,33 +257,43 @@
         <!-- Navegación -->
         <div class="nav-container card mb-6">
             <nav class="p-2 flex justify-start sm:justify-around text-xs sm:text-sm">
-                <button data-view="dashboard" class="nav-button active flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
+                <button data-view="dashboard"
+                    class="nav-button active flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
                     <span class="material-icons-outlined">today</span> Hoy
                 </button>
-                <button data-view="symptoms" class="nav-button flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
+                <button data-view="symptoms"
+                    class="nav-button flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
                     <span class="material-icons-outlined">sick</span> Síntomas
                 </button>
-                 <button data-view="weight" class="nav-button flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
+                <button data-view="weight"
+                    class="nav-button flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
                     <span class="material-icons-outlined">scale</span> Peso
                 </button>
-                 <button data-view="notes" class="nav-button flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
-                    <span class="material-icons-outlined">edit_note</span> Notas
+
                 </button>
-                <button data-view="journal" class="nav-button flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
-                    <span class="material-icons-outlined">book</span> Diario
-                </button>
-                <button data-view="exams" class="nav-button flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
+                <button data-view="exams"
+                    class="nav-button flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
                     <span class="material-icons-outlined">science</span> Exámenes
                 </button>
-                 <button data-view="compare" class="nav-button flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
+                <button data-view="compare"
+                    class="nav-button flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
                     <span class="material-icons-outlined">compare_arrows</span> Comparar
                 </button>
-                <button data-view="report" class="nav-button flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
+                <button data-view="report"
+                    class="nav-button flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
                     <span class="material-icons-outlined">assessment</span> Reporte
                 </button>
-                <button data-view="manage" class="nav-button flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
+                <button data-view="manage"
+                    class="nav-button flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
                     <span class="material-icons-outlined">settings</span> Gestión
                 </button>
+                <button data-view="notes"
+                    class="nav-button flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
+                    <span class="material-icons-outlined">edit_note</span> N
+                </button>
+                <button data-view="journal"
+                    class="nav-button flex-shrink-0 py-2 px-3 rounded-md flex items-center justify-center gap-2">
+                    <span class="material-icons-outlined">book</span> DP
             </nav>
         </div>
 
@@ -193,20 +302,27 @@
             <div id="dashboard-view" class="view fade-in">
                 <div class="card p-6 mb-6">
                     <div class="flex justify-between items-center">
-                         <h2 class="text-xl font-semibold mb-1" id="dashboard-date-display"></h2>
-                         <input type="date" id="dashboard-day-picker" class="p-2 border rounded-md bg-transparent dark:border-gray-600">
+                        <h2 class="text-xl font-semibold mb-1" id="dashboard-date-display"></h2>
+                        <input type="date" id="dashboard-day-picker"
+                            class="p-2 border rounded-md bg-transparent dark:border-gray-600">
                     </div>
                     <p class="text-gray-500 dark:text-gray-400 mb-4" id="current-phase"></p>
                     <div id="today-supplements" class="space-y-4"></div>
-                    <p id="no-supplements-today" class="text-center text-gray-500 dark:text-gray-400 py-4 hidden">No hay suplementos programados para hoy.</p>
-                    <button id="save-dashboard-btn" class="w-full mt-4 bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar Cambios del Día</button>
+                    <p id="no-supplements-today" class="text-center text-gray-500 dark:text-gray-400 py-4 hidden">No hay
+                        suplementos programados para hoy.</p>
+                    <button id="save-dashboard-btn"
+                        class="w-full mt-4 bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar
+                        Cambios del Día</button>
                 </div>
                 <div class="card p-6">
-                     <h3 class="text-lg font-semibold mb-4">Resumen Semanal</h3>
-                     <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4">
-                         <div id="weekly-progress-bar" class="bg-emerald-500 h-4 rounded-full transition-all duration-500" style="width: 0%;"></div>
-                     </div>
-                     <p id="weekly-progress-text" class="text-right mt-2 text-sm font-medium text-gray-600 dark:text-gray-300">0% completado</p>
+                    <h3 class="text-lg font-semibold mb-4">Resumen Semanal</h3>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4">
+                        <div id="weekly-progress-bar"
+                            class="bg-emerald-500 h-4 rounded-full transition-all duration-500" style="width: 0%;">
+                        </div>
+                    </div>
+                    <p id="weekly-progress-text"
+                        class="text-right mt-2 text-sm font-medium text-gray-600 dark:text-gray-300">0% completado</p>
                 </div>
             </div>
 
@@ -214,27 +330,35 @@
             <div id="symptoms-view" class="view hidden fade-in card p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-semibold">Registro de Síntomas</h2>
-                     <input type="date" id="symptoms-day-picker" class="p-2 border rounded-md bg-transparent dark:border-gray-600">
+                    <input type="date" id="symptoms-day-picker"
+                        class="p-2 border rounded-md bg-transparent dark:border-gray-600">
                 </div>
                 <div id="symptoms-checklist" class="space-y-4"></div>
-                <button id="save-symptoms-btn" class="w-full mt-4 bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar Síntomas del Día</button>
-                <button id="symptoms-uncheck-all" class="w-full mt-2 text-sm bg-gray-200 dark:bg-gray-700 py-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600">Desmarcar Todo</button>
+                <button id="save-symptoms-btn"
+                    class="w-full mt-4 bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar
+                    Síntomas del Día</button>
+                <button id="symptoms-uncheck-all"
+                    class="w-full mt-2 text-sm bg-gray-200 dark:bg-gray-700 py-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600">Desmarcar
+                    Todo</button>
             </div>
-            
+
             <!-- Vista de Peso -->
             <div id="weight-view" class="view hidden fade-in space-y-6">
-                 <div class="card p-6">
+                <div class="card p-6">
                     <h2 class="text-xl font-semibold mb-4">Registrar Peso</h2>
                     <form id="weight-form" class="flex items-end gap-4">
                         <div>
                             <label for="weight-date" class="block text-sm font-medium mb-1">Fecha</label>
-                            <input type="date" id="weight-date" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                            <input type="date" id="weight-date"
+                                class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
                         </div>
                         <div>
-                             <label for="weight-kg" class="block text-sm font-medium mb-1">Peso (kg)</label>
-                            <input type="number" step="0.1" id="weight-kg" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                            <label for="weight-kg" class="block text-sm font-medium mb-1">Peso (kg)</label>
+                            <input type="number" step="0.1" id="weight-kg"
+                                class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
                         </div>
-                        <button type="submit" class="bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar</button>
+                        <button type="submit"
+                            class="bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar</button>
                     </form>
                 </div>
                 <div class="card p-6">
@@ -253,11 +377,13 @@
                     <form id="note-form" class="space-y-4">
                         <div>
                             <label for="note-date" class="block text-sm font-medium mb-1">Fecha</label>
-                            <input type="date" id="note-date" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                            <input type="date" id="note-date"
+                                class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
                         </div>
-                        
+
                         <div>
-                            <label class="block text-sm font-medium mb-2">¿Cómo te sentiste? (puedes marcar varios)</label>
+                            <label class="block text-sm font-medium mb-2">¿Cómo te sentiste? (puedes marcar
+                                varios)</label>
                             <div id="note-mood-checkboxes" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
                         </div>
                         <div>
@@ -267,27 +393,35 @@
 
                         <div>
                             <label for="note-text" class="block text-sm font-medium mb-1">Nota Rápida</label>
-                            <textarea id="note-text" rows="5" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600"></textarea>
+                            <textarea id="note-text" rows="5"
+                                class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600"></textarea>
                         </div>
-                        <button type="submit" class="w-full bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar Nota</button>
+                        <button type="submit"
+                            class="w-full bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar
+                            Nota</button>
                     </form>
                 </div>
 
                 <div class="card p-6">
                     <h3 class="text-lg font-semibold mb-4">Resumen Gráfico de Sentimientos</h3>
-                     <div class="max-w-md mx-auto">
+                    <div class="max-w-md mx-auto">
                         <canvas id="notes-chart"></canvas>
                     </div>
                 </div>
 
-                 <div class="card p-6">
+                <div class="card p-6">
                     <h3 class="text-lg font-semibold mb-4">Historial de Notas</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-                        <input type="date" id="notes-filter-date" class="p-2 border rounded-md bg-transparent dark:border-gray-600">
-                        <select id="notes-filter-mood" class="p-2 border rounded-md bg-transparent dark:border-gray-600"></select>
-                        <select id="notes-filter-reason" class="p-2 border rounded-md bg-transparent dark:border-gray-600"></select>
+                        <input type="date" id="notes-filter-date"
+                            class="p-2 border rounded-md bg-transparent dark:border-gray-600">
+                        <select id="notes-filter-mood"
+                            class="p-2 border rounded-md bg-transparent dark:border-gray-600"></select>
+                        <select id="notes-filter-reason"
+                            class="p-2 border rounded-md bg-transparent dark:border-gray-600"></select>
                     </div>
-                    <button id="notes-clear-filters" class="w-full text-sm bg-gray-200 dark:bg-gray-700 py-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600">Limpiar Filtros</button>
+                    <button id="notes-clear-filters"
+                        class="w-full text-sm bg-gray-200 dark:bg-gray-700 py-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600">Limpiar
+                        Filtros</button>
                     <div id="notes-list" class="space-y-4 mt-4"></div>
                 </div>
             </div>
@@ -296,16 +430,22 @@
             <div id="journal-view" class="view hidden fade-in card p-6">
                 <h2 class="text-2xl font-semibold mb-4 font-serif">Diario Personal</h2>
                 <form id="journal-form" class="space-y-4">
-                     <div>
+                    <div>
                         <label for="journal-date" class="block text-sm font-medium mb-1">Fecha</label>
-                        <input type="date" id="journal-date" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                        <input type="date" id="journal-date"
+                            class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
                     </div>
                     <div>
-                        <textarea id="journal-text" rows="10" class="w-full p-4 border rounded-md journal-paper dark:border-gray-600" placeholder="Escribe aquí tus pensamientos..."></textarea>
+                        <textarea id="journal-text" rows="10"
+                            class="w-full p-4 border rounded-md journal-paper dark:border-gray-600"
+                            placeholder="Escribe aquí tus pensamientos..."></textarea>
                     </div>
-                    <button type="submit" class="w-full bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar Entrada</button>
+                    <button type="submit"
+                        class="w-full bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar
+                        Entrada</button>
                 </form>
-                 <button id="show-journal-report-btn" class="w-full mt-4 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 flex items-center justify-center gap-2">
+                <button id="show-journal-report-btn"
+                    class="w-full mt-4 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 flex items-center justify-center gap-2">
                     <span class="material-icons-outlined">menu_book</span> Ver Diario Consolidado
                 </button>
             </div>
@@ -315,13 +455,17 @@
             <div id="exams-view" class="view hidden fade-in card p-6">
                 <h2 class="text-xl font-semibold mb-4">Registrar Exámenes</h2>
                 <div class="flex items-end gap-4 mb-4">
-                     <div>
-                        <label for="exam-table-date" class="block text-sm font-medium mb-1">Fecha de los Resultados</label>
-                        <input type="date" id="exam-table-date" class="p-2 border rounded-md bg-transparent dark:border-gray-600">
+                    <div>
+                        <label for="exam-table-date" class="block text-sm font-medium mb-1">Fecha de los
+                            Resultados</label>
+                        <input type="date" id="exam-table-date"
+                            class="p-2 border rounded-md bg-transparent dark:border-gray-600">
                     </div>
-                    <button id="save-exams-btn" class="bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar Cambios</button>
+                    <button id="save-exams-btn"
+                        class="bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar
+                        Cambios</button>
                 </div>
-                 <div class="overflow-x-auto">
+                <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left">
                         <thead>
                             <tr class="border-b dark:border-gray-700">
@@ -335,11 +479,12 @@
                     </table>
                 </div>
             </div>
-            
+
             <!-- Vista de Comparativas -->
-             <div id="compare-view" class="view hidden fade-in card p-6">
+            <div id="compare-view" class="view hidden fade-in card p-6">
                 <h2 class="text-xl font-semibold mb-4">Comparativa de Exámenes</h2>
-                 <button id="export-exams-json" class="mb-4 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 flex items-center justify-center gap-2">
+                <button id="export-exams-json"
+                    class="mb-4 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 flex items-center justify-center gap-2">
                     <span class="material-icons-outlined">download</span> Exportar a JSON
                 </button>
                 <div id="compare-table-container" class="overflow-x-auto"></div>
@@ -347,46 +492,60 @@
 
             <!-- Vista de Reporte -->
             <div id="report-view" class="view hidden fade-in card p-6">
-                 <h2 class="text-xl font-semibold mb-4">Reporte Mensual</h2>
+                <h2 class="text-xl font-semibold mb-4">Reporte Mensual</h2>
                 <div class="flex justify-between items-center mb-4">
-                    <button id="report-prev-month" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><span class="material-icons-outlined">chevron_left</span></button>
+                    <button id="report-prev-month"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><span
+                            class="material-icons-outlined">chevron_left</span></button>
                     <h3 id="report-month-year" class="text-xl font-semibold"></h3>
-                    <button id="report-next-month" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700" ><span class="material-icons-outlined">chevron_right</span></button>
+                    <button id="report-next-month"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><span
+                            class="material-icons-outlined">chevron_right</span></button>
                 </div>
                 <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold mb-2">
                     <span>D</span><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span>
                 </div>
                 <div id="report-calendar-grid" class="grid grid-cols-7 gap-1 text-center"></div>
-                <button id="consolidate-journal-btn" class="w-full mt-6 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600" disabled></button>
+                <button id="consolidate-journal-btn"
+                    class="w-full mt-6 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600" disabled></button>
             </div>
 
             <!-- Vista de Gestión -->
             <div id="manage-view" class="view hidden fade-in space-y-6">
                 <div class="card p-6">
                     <h3 class="text-lg font-semibold mb-4">Seguridad de Notas</h3>
-                    <button id="change-password-btn" class="w-full bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600">Cambiar Contraseña</button>
+                    <button id="change-password-btn"
+                        class="w-full bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600">Cambiar
+                        Contraseña</button>
                 </div>
-                 <div class="card p-6">
+                <div class="card p-6">
                     <h3 class="text-lg font-semibold mb-4">Gestionar Opciones de Notas</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <h4 class="font-medium mb-2">Sentimientos</h4>
                             <div id="moods-list-manage" class="space-y-2 mb-2"></div>
                             <form id="add-mood-form" class="flex gap-2">
-                                <input type="text" id="new-mood-input" placeholder="Nuevo sentimiento" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
-                                <select id="new-mood-group" class="p-2 border rounded-md bg-transparent dark:border-gray-600">
+                                <input type="text" id="new-mood-input" placeholder="Nuevo sentimiento"
+                                    class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                                <select id="new-mood-group"
+                                    class="p-2 border rounded-md bg-transparent dark:border-gray-600">
                                     <option value="Positivos">Positivo</option>
                                     <option value="Negativos">Negativo</option>
                                 </select>
-                                <button type="submit" class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"><span class="material-icons-outlined">add</span></button>
+                                <button type="submit"
+                                    class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"><span
+                                        class="material-icons-outlined">add</span></button>
                             </form>
                         </div>
                         <div>
                             <h4 class="font-medium mb-2">Razones</h4>
                             <div id="reasons-list-manage" class="space-y-2 mb-2"></div>
-                             <form id="add-reason-form" class="flex gap-2">
-                                <input type="text" id="new-reason-input" placeholder="Nueva razón" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
-                                <button type="submit" class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"><span class="material-icons-outlined">add</span></button>
+                            <form id="add-reason-form" class="flex gap-2">
+                                <input type="text" id="new-reason-input" placeholder="Nueva razón"
+                                    class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                                <button type="submit"
+                                    class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"><span
+                                        class="material-icons-outlined">add</span></button>
                             </form>
                         </div>
                     </div>
@@ -394,36 +553,48 @@
                 <div class="card p-6">
                     <h2 class="text-xl font-semibold mb-4">Gestionar Fases y Suplementos</h2>
                     <div id="phases-container" class="space-y-4"></div>
-                    <button id="add-phase-btn" class="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Agregar Nueva Fase</button>
+                    <button id="add-phase-btn"
+                        class="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Agregar Nueva
+                        Fase</button>
                 </div>
-                 <div class="card p-6">
+                <div class="card p-6">
                     <h2 class="text-xl font-semibold mb-4">Carga Masiva de Suplementos</h2>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Sube un archivo JSON para agregar o actualizar fases y suplementos.</p>
-                    <input type="file" id="json-upload" accept=".json" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"/>
-                 </div>
-                 <div class="card p-6">
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Sube un archivo JSON para agregar o
+                        actualizar fases y suplementos.</p>
+                    <input type="file" id="json-upload" accept=".json"
+                        class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100" />
+                </div>
+                <div class="card p-6">
                     <h2 class="text-xl font-semibold mb-4">Recordatorios</h2>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                        Activa para recibir un recordatorio diario. Necesitarás conceder permisos de notificación en tu navegador.
+                        Activa para recibir un recordatorio diario. Necesitarás conceder permisos de notificación en tu
+                        navegador.
                     </p>
                     <div class="flex items-center justify-between">
                         <label for="notifications-toggle" class="font-medium">Activar recordatorio</label>
-                        <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-                            <input type="checkbox" name="notifications-toggle" id="notifications-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
-                            <label for="notifications-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 dark:bg-gray-600 cursor-pointer"></label>
+                        <div
+                            class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                            <input type="checkbox" name="notifications-toggle" id="notifications-toggle"
+                                class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                            <label for="notifications-toggle"
+                                class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 dark:bg-gray-600 cursor-pointer"></label>
                         </div>
                     </div>
                     <div id="notification-time-container" class="mt-4 hidden">
-                        <label for="notification-time" class="block text-sm font-medium mb-1">Hora del recordatorio:</label>
-                        <input type="time" id="notification-time" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600">
+                        <label for="notification-time" class="block text-sm font-medium mb-1">Hora del
+                            recordatorio:</label>
+                        <input type="time" id="notification-time"
+                            class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600">
                     </div>
                 </div>
-                 <div class="card p-6">
+                <div class="card p-6">
                     <h2 class="text-xl font-semibold mb-4 text-red-600 dark:text-red-400">Zona de Peligro</h2>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                        Esto eliminará permanentemente todo tu historial y cualquier cambio que hayas hecho. La aplicación volverá a su estado inicial.
+                        Esto eliminará permanentemente todo tu historial y cualquier cambio que hayas hecho. La
+                        aplicación volverá a su estado inicial.
                     </p>
-                    <button id="reset-app-btn" class="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 flex items-center justify-center gap-2">
+                    <button id="reset-app-btn"
+                        class="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 flex items-center justify-center gap-2">
                         <span class="material-icons-outlined">delete_forever</span>
                         Resetear Aplicación
                     </button>
@@ -433,28 +604,38 @@
     </div>
 
     <!-- Modales -->
-    <div id="password-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden">
+    <div id="password-modal"
+        class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden">
         <div class="card p-6 w-full max-w-sm text-center">
             <span class="material-icons-outlined text-5xl text-emerald-500 mx-auto mb-4">lock</span>
             <h2 id="password-modal-title" class="text-lg font-bold mb-4">Acceso a Notas</h2>
             <p id="password-modal-text" class="text-sm text-gray-500 dark:text-gray-400 mb-4"></p>
             <form id="password-form">
-                 <input type="password" id="password-old-input" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600 mb-4 hidden" placeholder="Contraseña actual">
-                <input type="password" id="password-input" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600 mb-4" required placeholder="Contraseña">
-                <input type="password" id="password-confirm-input" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600 mb-4 hidden" placeholder="Confirma tu contraseña">
+                <input type="password" id="password-old-input"
+                    class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600 mb-4 hidden"
+                    placeholder="Contraseña actual">
+                <input type="password" id="password-input"
+                    class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600 mb-4" required
+                    placeholder="Contraseña">
+                <input type="password" id="password-confirm-input"
+                    class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600 mb-4 hidden"
+                    placeholder="Confirma tu contraseña">
                 <div class="flex justify-center gap-4">
-                    <button type="button" id="cancel-password-btn" class="py-2 px-6 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600">Cancelar</button>
-                    <button type="submit" class="bg-emerald-500 text-white py-2 px-6 rounded-md hover:bg-emerald-600">Aceptar</button>
+                    <button type="button" id="cancel-password-btn"
+                        class="py-2 px-6 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600">Cancelar</button>
+                    <button type="submit"
+                        class="bg-emerald-500 text-white py-2 px-6 rounded-md hover:bg-emerald-600">Aceptar</button>
                 </div>
             </form>
         </div>
     </div>
-    
-     <div id="toast-notification" class="fixed bottom-5 right-5 card p-4 max-w-sm text-center hidden fade-in z-50">
+
+    <div id="toast-notification" class="fixed bottom-5 right-5 card p-4 max-w-sm text-center hidden fade-in z-50">
         <p id="toast-message"></p>
     </div>
 
-    <div id="supplement-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-40">
+    <div id="supplement-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-40">
         <div class="card p-6 w-full max-w-md">
             <h2 id="modal-title" class="text-lg font-bold mb-4"></h2>
             <form id="supplement-form">
@@ -462,19 +643,24 @@
                 <input type="hidden" id="modal-supplement-index">
                 <div class="mb-4">
                     <label for="supplement-name" class="block text-sm font-medium mb-1">Nombre</label>
-                    <input type="text" id="supplement-name" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                    <input type="text" id="supplement-name"
+                        class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
                 </div>
                 <div class="mb-4">
                     <label for="supplement-dosis" class="block text-sm font-medium mb-1">Dosis</label>
-                    <input type="text" id="supplement-dosis" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                    <input type="text" id="supplement-dosis"
+                        class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
                 </div>
                 <div class="mb-4">
                     <label for="supplement-horario" class="block text-sm font-medium mb-1">Horario</label>
-                    <input type="text" id="supplement-horario" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                    <input type="text" id="supplement-horario"
+                        class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
                 </div>
                 <div class="flex justify-end gap-4">
-                    <button type="button" id="cancel-modal" class="py-2 px-4 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600">Cancelar</button>
-                    <button type="submit" class="bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar</button>
+                    <button type="button" id="cancel-modal"
+                        class="py-2 px-4 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600">Cancelar</button>
+                    <button type="submit"
+                        class="bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar</button>
                 </div>
             </form>
         </div>
@@ -486,55 +672,68 @@
                 <input type="hidden" id="modal-phase-edit-id">
                 <div class="mb-4">
                     <label for="phase-name" class="block text-sm font-medium mb-1">Nombre de la Fase</label>
-                    <input type="text" id="phase-name" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                    <input type="text" id="phase-name"
+                        class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
                 </div>
                 <div class="mb-4">
                     <label for="phase-start" class="block text-sm font-medium mb-1">Fecha de Inicio</label>
-                    <input type="date" id="phase-start" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                    <input type="date" id="phase-start"
+                        class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
                 </div>
                 <div class="mb-4">
                     <label for="phase-end" class="block text-sm font-medium mb-1">Fecha de Fin</label>
-                    <input type="date" id="phase-end" class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
+                    <input type="date" id="phase-end"
+                        class="w-full p-2 border rounded-md bg-transparent dark:border-gray-600" required>
                 </div>
                 <div class="flex justify-end gap-4">
-                    <button type="button" id="cancel-phase-modal" class="py-2 px-4 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600">Cancelar</button>
-                    <button type="submit" class="bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar</button>
+                    <button type="button" id="cancel-phase-modal"
+                        class="py-2 px-4 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600">Cancelar</button>
+                    <button type="submit"
+                        class="bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Guardar</button>
                 </div>
             </form>
         </div>
     </div>
-    <div id="reset-confirm-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-40">
+    <div id="reset-confirm-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-40">
         <div class="card p-6 w-full max-w-md text-center">
             <span class="material-icons-outlined text-5xl text-red-500 mx-auto mb-4">warning_amber</span>
             <h2 class="text-lg font-bold mb-2">¿Estás realmente seguro?</h2>
             <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
-                Esta acción es irreversible y eliminará todo tu historial y personalizaciones. La aplicación volverá a su estado inicial.
+                Esta acción es irreversible y eliminará todo tu historial y personalizaciones. La aplicación volverá a
+                su estado inicial.
             </p>
             <div class="flex justify-center gap-4">
-                <button id="cancel-reset-btn" class="py-2 px-6 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600">Cancelar</button>
-                <button id="confirm-reset-btn" class="bg-red-500 text-white py-2 px-6 rounded-md hover:bg-red-600">Sí, Resetear</button>
+                <button id="cancel-reset-btn"
+                    class="py-2 px-6 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600">Cancelar</button>
+                <button id="confirm-reset-btn" class="bg-red-500 text-white py-2 px-6 rounded-md hover:bg-red-600">Sí,
+                    Resetear</button>
             </div>
         </div>
     </div>
-    <div id="report-day-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-40">
+    <div id="report-day-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-40">
         <div class="card p-6 w-full max-w-md">
             <h2 id="report-day-title" class="text-lg font-bold mb-4"></h2>
             <div id="report-day-content" class="space-y-3 text-sm"></div>
             <div class="flex justify-end mt-6">
-                <button id="close-report-day-modal" class="bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Cerrar</button>
+                <button id="close-report-day-modal"
+                    class="bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Cerrar</button>
             </div>
         </div>
     </div>
-     <div id="journal-report-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-40">
+    <div id="journal-report-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-40">
         <div class="card p-6 w-full max-w-2xl h-5/6 flex flex-col">
             <h2 class="text-xl font-bold mb-4">Diario Consolidado</h2>
             <div id="journal-report-content" class="flex-grow overflow-y-auto pr-2 space-y-4 journal-paper p-4"></div>
             <div class="flex justify-end mt-6">
-                <button id="close-journal-report-modal" class="bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Cerrar</button>
+                <button id="close-journal-report-modal"
+                    class="bg-emerald-500 text-white py-2 px-4 rounded-md hover:bg-emerald-600">Cerrar</button>
             </div>
         </div>
     </div>
-    
+
     <script type="module">
         // --- ESTADO DE LA APLICACIÓN ---
         const AppState = {
@@ -563,15 +762,15 @@
             passwordMode: 'login', // 'login', 'create', 'change', 'reset'
             viewToUnlock: null,
         };
-        
+
         // --- ELEMENTOS DEL DOM ---
         const $ = (selector) => document.querySelector(selector);
-        
+
         // --- INICIALIZACIÓN ---
         async function init() {
             await loadState();
             setupEventListeners();
-            
+
             if (sessionStorage.getItem('welcomeShown')) {
                 $('#splash-view').classList.add('hidden');
                 $('#main-container').classList.remove('hidden');
@@ -603,11 +802,11 @@
         async function loadState() {
             try {
                 const [symptomsRes, examsRes, welcomeRes, weightRes, supplementsRes] = await Promise.all([
-                    fetch('sintomas.json').catch(e=>null), 
-                    fetch('examenes.json').catch(e=>null),
-                    fetch('bienvenida.json').catch(e=>null), 
-                    fetch('mensajes.json').catch(e=>null),
-                    fetch('suplementos.json').catch(e=>null)
+                    fetch('sintomas.json').catch(e => null),
+                    fetch('examenes.json').catch(e => null),
+                    fetch('bienvenida.json').catch(e => null),
+                    fetch('mensajes.json').catch(e => null),
+                    fetch('suplementos.json').catch(e => null)
                 ]);
                 if (symptomsRes && symptomsRes.ok) AppState.symptomList = await symptomsRes.json();
                 if (examsRes && examsRes.ok) AppState.examList = (await examsRes.json()).examenes;
@@ -617,7 +816,7 @@
                 const savedState = localStorage.getItem('healthApp');
                 if (savedState) {
                     const parsed = JSON.parse(savedState);
-                     // Merge settings to avoid overwriting new defaults
+                    // Merge settings to avoid overwriting new defaults
                     const defaultSettings = {
                         theme: 'light',
                         notifications: { enabled: false, time: '08:00' },
@@ -643,7 +842,7 @@
                 console.error("Error cargando archivos JSON iniciales:", error);
             }
         }
-        
+
         // --- FUNCIONES DE UTILIDAD ---
         const formatDate = (date, options = { year: 'numeric', month: 'long', day: 'numeric' }) => date.toLocaleDateString('es-ES', options);
         const toISODateString = (date) => new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
@@ -653,7 +852,7 @@
             if (['notes', 'journal'].includes(AppState.activeView) && !['notes', 'journal'].includes(view)) {
                 AppState.notesUnlocked = false;
             }
-            
+
             if (['notes', 'journal'].includes(view) && !AppState.notesUnlocked) {
                 AppState.viewToUnlock = view;
                 promptForPassword('login');
@@ -673,11 +872,11 @@
                 notes: renderNotesView, journal: renderJournalView, exams: renderExamsView, compare: renderCompareView,
                 report: renderReportView, manage: renderManageView
             };
-            if(renderers[AppState.activeView]) renderers[AppState.activeView]();
-            
+            if (renderers[AppState.activeView]) renderers[AppState.activeView]();
+
             document.querySelectorAll('#main-container .view').forEach(v => v.classList.add('hidden'));
             $(`#${AppState.activeView}-view`).classList.remove('hidden');
-            
+
             document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active'));
             const activeButton = $(`.nav-button[data-view="${AppState.activeView}"]`);
             if (activeButton) activeButton.classList.add('active');
@@ -695,8 +894,8 @@
             const container = $('#today-supplements');
             container.innerHTML = '';
             if (supplements.length > 0) {
-                 $('#no-supplements-today').classList.add('hidden');
-                 supplements.forEach(sup => {
+                $('#no-supplements-today').classList.add('hidden');
+                supplements.forEach(sup => {
                     const dateStr = toISODateString(day);
                     const isTaken = AppState.history[dateStr] && AppState.history[dateStr][sup.nombre];
                     container.innerHTML += `<div class="flex items-center justify-between p-3 rounded-lg border dark:border-gray-700 bg-gray-50 dark:bg-gray-800"><div class="flex items-center"><input type="checkbox" id="sup-${dateStr}-${sup.nombre.replace(/\s/g, '')}" data-name="${sup.nombre}" ${isTaken ? 'checked' : ''} class="h-6 w-6 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 mr-4"><div><label for="sup-${dateStr}-${sup.nombre.replace(/\s/g, '')}" class="font-semibold">${sup.nombre}</label><p class="text-sm text-gray-500 dark:text-gray-400">${sup.dosis} - ${sup.horario}</p></div></div><span class="material-icons-outlined text-2xl ${isTaken ? 'text-emerald-500' : 'text-gray-400'}">${isTaken ? 'check_circle' : 'radio_button_unchecked'}</span></div>`;
@@ -706,7 +905,7 @@
             }
             renderWeeklyProgress();
         }
-        
+
         function renderWeeklyProgress() {
             let totalSupps = 0;
             let takenSupps = 0;
@@ -744,20 +943,20 @@
                 container.innerHTML += `<h3 class="text-lg font-semibold mb-2 mt-4">${category.categoria}</h3><div class="grid grid-cols-1 sm:grid-cols-2 gap-2">${symptomsHtml}</div>`;
             });
         }
-        
+
         let weightChartInstance = null;
         function renderWeightView() {
             $('#weight-date').value = toISODateString(new Date());
             const container = $('#weight-history');
             container.innerHTML = '';
-            const sortedDates = Object.keys(AppState.weight).sort((a,b) => new Date(b) - new Date(a));
+            const sortedDates = Object.keys(AppState.weight).sort((a, b) => new Date(b) - new Date(a));
             sortedDates.forEach(dateStr => {
                 container.innerHTML += `<li class="flex justify-between items-center p-2 border-b dark:border-gray-700"><span>${formatDate(new Date(dateStr + 'T12:00:00Z'))}</span><span class="font-semibold">${AppState.weight[dateStr]} kg</span></li>`;
             });
-            
+
             const chartCtx = $('#weight-chart').getContext('2d');
-            const chartData = Object.keys(AppState.weight).sort().map(date => ({x: date, y: AppState.weight[date]}));
-            if(weightChartInstance) weightChartInstance.destroy();
+            const chartData = Object.keys(AppState.weight).sort().map(date => ({ x: date, y: AppState.weight[date] }));
+            if (weightChartInstance) weightChartInstance.destroy();
             weightChartInstance = new Chart(chartCtx, {
                 type: 'line',
                 data: { datasets: [{ label: 'Peso (kg)', data: chartData, borderColor: '#10b981', backgroundColor: '#10b98133', fill: true, tension: 0.1 }] },
@@ -786,7 +985,7 @@
             const filterDate = $('#notes-filter-date').value;
             const filterMood = $('#notes-filter-mood').value;
             const filterReason = $('#notes-filter-reason').value;
-            
+
             const historyContainer = $('#notes-list');
             historyContainer.innerHTML = '';
             const filteredNotes = Object.entries(AppState.notes).filter(([dateStr, note]) => {
@@ -797,22 +996,22 @@
             });
 
             if (filteredNotes.length > 0) {
-                filteredNotes.sort((a,b) => new Date(b[0]) - new Date(a[0])).forEach(([dateStr, note]) => {
+                filteredNotes.sort((a, b) => new Date(b[0]) - new Date(a[0])).forEach(([dateStr, note]) => {
                     const moods = (note.moods || []).join(', ');
                     const reasons = (note.reasons || []).join(', ');
                     historyContainer.innerHTML += `<div class="border-l-4 border-emerald-500 pl-4 py-2"><p class="font-bold">${formatDate(new Date(dateStr + 'T12:00:00Z'))}</p><p class="text-sm font-semibold">Sentimientos: ${moods}</p><p class="text-sm font-semibold">Razones: ${reasons}</p><p class="text-gray-600 dark:text-gray-300 whitespace-pre-wrap mt-1">${note.text}</p></div>`;
                 });
             } else {
-                 historyContainer.innerHTML = `<p class="text-center text-gray-500 py-4">No hay notas que coincidan con los filtros.</p>`;
+                historyContainer.innerHTML = `<p class="text-center text-gray-500 py-4">No hay notas que coincidan con los filtros.</p>`;
             }
-            
+
             // Render Chart based on filtered notes
             const moodCounts = {};
-            filteredNotes.forEach(([,note]) => (note.moods || []).forEach(mood => {
+            filteredNotes.forEach(([, note]) => (note.moods || []).forEach(mood => {
                 moodCounts[mood] = (moodCounts[mood] || 0) + 1;
             }));
             const chartCtx = $('#notes-chart').getContext('2d');
-            if(notesChartInstance) notesChartInstance.destroy();
+            if (notesChartInstance) notesChartInstance.destroy();
             notesChartInstance = new Chart(chartCtx, {
                 type: 'doughnut',
                 data: {
@@ -825,8 +1024,8 @@
                 options: { responsive: true, plugins: { legend: { position: 'top' } } }
             });
         }
-        
-        function populateNotesFilters(){
+
+        function populateNotesFilters() {
             const moodFilter = $('#notes-filter-mood');
             const reasonFilter = $('#notes-filter-reason');
             const currentMood = moodFilter.value;
@@ -834,7 +1033,7 @@
 
             const allMoods = new Set(Object.values(AppState.notes).flatMap(n => n.moods || []));
             const allReasons = new Set(Object.values(AppState.notes).flatMap(n => n.reasons || []));
-            
+
             moodFilter.innerHTML = '<option value="all">Todos los sentimientos</option>';
             allMoods.forEach(mood => moodFilter.innerHTML += `<option value="${mood}">${mood}</option>`);
 
@@ -862,9 +1061,9 @@
                 (exams || []).forEach(exam => {
                     const params = exam.parametros || [exam];
                     params.forEach((param, index) => {
-                         const rangeText = param.rango ? `${param.rango.min} - ${param.rango.max} ${param.unidad || ''}`: 'N/A';
-                         const value = dailyExams[param.id] || '';
-                         tableBody.innerHTML += `<tr class="border-b dark:border-gray-700"><td class="p-2 ${index === 0 ? 'font-bold' : ''}">${index === 0 ? exam.nombre : ''} <span class="text-gray-500 text-xs">${param.nombre !== exam.nombre ? param.nombre : ''}</span></td><td class="p-2 hidden sm:table-cell capitalize">${index === 0 ? frequency : ''}</td><td class="p-2 text-xs">${rangeText}</td><td class="p-2"><input type="number" step="any" data-param-id="${param.id}" value="${value}" class="w-full p-1 border rounded bg-transparent dark:border-gray-600"></td></tr>`;
+                        const rangeText = param.rango ? `${param.rango.min} - ${param.rango.max} ${param.unidad || ''}` : 'N/A';
+                        const value = dailyExams[param.id] || '';
+                        tableBody.innerHTML += `<tr class="border-b dark:border-gray-700"><td class="p-2 ${index === 0 ? 'font-bold' : ''}">${index === 0 ? exam.nombre : ''} <span class="text-gray-500 text-xs">${param.nombre !== exam.nombre ? param.nombre : ''}</span></td><td class="p-2 hidden sm:table-cell capitalize">${index === 0 ? frequency : ''}</td><td class="p-2 text-xs">${rangeText}</td><td class="p-2"><input type="number" step="any" data-param-id="${param.id}" value="${value}" class="w-full p-1 border rounded bg-transparent dark:border-gray-600"></td></tr>`;
                     });
                 });
             });
@@ -876,12 +1075,12 @@
             const allExams = [].concat(...Object.values(AppState.examList));
             const paramMap = new Map();
             allExams.forEach(exam => (exam.parametros || [exam]).forEach(p => paramMap.set(p.id, p)));
-            const dates = Object.keys(AppState.exams).sort((a,b) => new Date(a) - new Date(b));
+            const dates = Object.keys(AppState.exams).sort((a, b) => new Date(a) - new Date(b));
             if (dates.length === 0) {
                 container.innerHTML = '<p class="text-gray-500">No hay datos de exámenes para comparar.</p>'; return;
             }
             let table = '<table class="w-full text-sm text-left"><thead><tr class="border-b dark:border-gray-700"><th class="p-2">Examen</th><th class="p-2">Rango</th>';
-            dates.forEach(date => table += `<th class="p-2">${formatDate(new Date(date + 'T12:00:00Z'), {day:'2-digit', month:'short'})}</th>`);
+            dates.forEach(date => table += `<th class="p-2">${formatDate(new Date(date + 'T12:00:00Z'), { day: '2-digit', month: 'short' })}</th>`);
             table += '</tr></thead><tbody>';
             paramMap.forEach(param => {
                 table += `<tr class="border-b dark:border-gray-700"><td class="p-2 font-medium">${param.nombre}</td>`;
@@ -899,7 +1098,7 @@
             });
             container.innerHTML = table + '</tbody></table>';
         }
-        
+
         function renderReportView() {
             const date = AppState.reportDate;
             $('#report-month-year').textContent = formatDate(date, { month: 'long', year: 'numeric' });
@@ -910,16 +1109,16 @@
             const firstDayOfMonth = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             for (let i = 0; i < firstDayOfMonth; i++) grid.appendChild(document.createElement('div'));
-            
+
             const monthNotes = Object.entries(AppState.notes).filter(([d,]) => d.startsWith(toISODateString(date).slice(0, 7)));
-            
+
             for (let i = 1; i <= daysInMonth; i++) {
                 const dayEl = document.createElement('button');
                 const currentDate = new Date(year, month, i);
                 const dateStr = toISODateString(currentDate);
                 dayEl.textContent = i;
                 dayEl.dataset.date = dateStr;
-                
+
                 let dayClasses = 'p-2 rounded-full aspect-square flex items-center justify-center transition-colors hover:bg-gray-200 dark:hover:bg-gray-700 ';
                 const note = AppState.notes[dateStr];
                 if (note && note.moods && note.moods.length > 0) {
@@ -947,10 +1146,10 @@
             const container = $('#phases-container');
             container.innerHTML = '';
             if (!AppState.data.fases) AppState.data.fases = [];
-            AppState.data.fases.sort((a,b) => new Date(a.inicio) - new Date(b.inicio)).forEach(phase => {
+            AppState.data.fases.sort((a, b) => new Date(a.inicio) - new Date(b.inicio)).forEach(phase => {
                 const phaseEl = document.createElement('div');
                 phaseEl.className = 'border dark:border-gray-700 rounded-lg p-4';
-                
+
                 let supplementsHtml = (phase.suplementos || []).map((sup, index) => `
                     <div class="flex justify-between items-center py-2 border-b dark:border-gray-600 last:border-b-0">
                         <div>
@@ -980,21 +1179,21 @@
                 `;
                 container.appendChild(phaseEl);
             });
-             const notifToggle = $('#notifications-toggle');
-             const notifTimeContainer = $('#notification-time-container');
-             const notifTimeInput = $('#notification-time');
-             notifToggle.checked = AppState.settings.notifications.enabled;
-             notifTimeInput.value = AppState.settings.notifications.time;
-             if (AppState.settings.notifications.enabled) {
-                 notifTimeContainer.classList.remove('hidden');
-             } else {
-                 notifTimeContainer.classList.add('hidden');
-             }
-             
-             // Render mood and reason manager
-             renderMoodReasonManager();
+            const notifToggle = $('#notifications-toggle');
+            const notifTimeContainer = $('#notification-time-container');
+            const notifTimeInput = $('#notification-time');
+            notifToggle.checked = AppState.settings.notifications.enabled;
+            notifTimeInput.value = AppState.settings.notifications.time;
+            if (AppState.settings.notifications.enabled) {
+                notifTimeContainer.classList.remove('hidden');
+            } else {
+                notifTimeContainer.classList.add('hidden');
+            }
+
+            // Render mood and reason manager
+            renderMoodReasonManager();
         }
-        
+
         function renderMoodReasonManager() {
             const { moodOptions, reasonOptions } = AppState.settings;
             const moodsContainer = $('#moods-list-manage');
@@ -1019,7 +1218,7 @@
         function setupEventListeners() {
             $('#enter-app-btn').addEventListener('click', () => {
                 $('#splash-view').classList.add('fade-out');
-                setTimeout(() => { 
+                setTimeout(() => {
                     $('#splash-view').classList.add('hidden');
                     $('#main-container').classList.remove('hidden');
                     $('#main-container').classList.add('fade-in');
@@ -1028,7 +1227,7 @@
                 }, 500);
                 sessionStorage.setItem('welcomeShown', 'true');
             });
-            
+
             $('#home-btn').addEventListener('click', () => {
                 $('#main-container').classList.add('fade-out');
                 setTimeout(() => {
@@ -1043,24 +1242,24 @@
 
             document.querySelectorAll('.nav-button').forEach(b => b.addEventListener('click', () => navigateTo(b.dataset.view)));
             $('#theme-toggle').addEventListener('click', toggleTheme);
-            $('#dashboard-day-picker').addEventListener('change', (e) => { 
-                if(e.target.value) {
-                    AppState.currentDate = new Date(e.target.value + 'T12:00:00Z'); 
+            $('#dashboard-day-picker').addEventListener('change', (e) => {
+                if (e.target.value) {
+                    AppState.currentDate = new Date(e.target.value + 'T12:00:00Z');
                     render();
                 }
             });
             $('#symptoms-day-picker').addEventListener('change', (e) => {
-                 if(e.target.value) {
+                if (e.target.value) {
                     AppState.currentDate = new Date(e.target.value + 'T12:00:00Z');
                     render();
-                 }
+                }
             });
             $('#symptoms-uncheck-all').addEventListener('click', () => {
                 document.querySelectorAll('#symptoms-checklist input[type="checkbox"]').forEach(cb => {
                     cb.checked = false;
                 });
             });
-            
+
             // Formularios
             $('#weight-form').addEventListener('submit', handleWeightFormSubmit);
             $('#note-form').addEventListener('submit', handleNoteFormSubmit);
@@ -1082,8 +1281,8 @@
             $('#cancel-reset-btn').addEventListener('click', () => $('#reset-confirm-modal').classList.add('hidden'));
             $('#confirm-reset-btn').addEventListener('click', handleResetApp);
             $('#add-phase-btn').addEventListener('click', handleAddPhaseClick);
-             $('#cancel-modal').addEventListener('click', () => $('#supplement-modal').classList.add('hidden'));
-             $('#cancel-phase-modal').addEventListener('click', () => $('#phase-modal').classList.add('hidden'));
+            $('#cancel-modal').addEventListener('click', () => $('#supplement-modal').classList.add('hidden'));
+            $('#cancel-phase-modal').addEventListener('click', () => $('#phase-modal').classList.add('hidden'));
             $('#change-password-btn').addEventListener('click', () => promptForPassword('change'));
             $('#consolidate-journal-btn').addEventListener('click', showJournalReport);
             $('#show-journal-report-btn').addEventListener('click', showJournalReport);
@@ -1095,11 +1294,11 @@
             $('#notifications-toggle').addEventListener('change', handleNotificationsToggle);
             $('#notification-time').addEventListener('change', handleNotificationTimeChange);
             $('#json-upload').addEventListener('change', handleJsonUpload);
-            
+
             // Eventos delegados
-            $('#report-calendar-grid').addEventListener('click', (e) => { if(e.target.dataset.date) showReportDayModal(e.target.dataset.date); });
+            $('#report-calendar-grid').addEventListener('click', (e) => { if (e.target.dataset.date) showReportDayModal(e.target.dataset.date); });
             $('#manage-view').addEventListener('click', handleManageViewClicks);
-            
+
             // Filtros de Notas y Diario
             $('#notes-filter-date').addEventListener('change', renderNotesView);
             $('#notes-filter-mood').addEventListener('change', renderNotesView);
@@ -1116,7 +1315,7 @@
                 $('#journal-text').value = entry;
             });
         }
-        
+
         // --- MANEJADORES DE EVENTOS ESPECÍFICOS ---
 
         function handleSaveDashboard() {
@@ -1168,7 +1367,7 @@
             }
         }
 
-        function handleNoteFormSubmit(e) { 
+        function handleNoteFormSubmit(e) {
             e.preventDefault();
             const date = $('#note-date').value;
             const selectedMoods = Array.from(document.querySelectorAll('#note-mood-checkboxes input:checked')).map(cb => cb.value);
@@ -1189,7 +1388,7 @@
             $('#note-form').reset();
             showToast("Nota guardada con éxito.");
         }
-        
+
         function handleJournalFormSubmit(e) {
             e.preventDefault();
             const date = $('#journal-date').value;
@@ -1275,60 +1474,60 @@
             const allNoteDates = Object.keys(AppState.notes);
             const allJournalDates = Object.keys(AppState.journal);
             const allDates = [...new Set([...allNoteDates, ...allJournalDates])];
-            
-            const sortedDates = allDates.sort((a,b) => new Date(a) - new Date(b));
+
+            const sortedDates = allDates.sort((a, b) => new Date(a) - new Date(b));
 
             sortedDates.forEach(dateStr => {
-                 const note = AppState.notes[dateStr];
-                 const journal = AppState.journal[dateStr];
-                 contentEl.innerHTML += `<div class="mb-4"><h3 class="font-bold text-lg">${formatDate(new Date(dateStr + 'T12:00:00Z'))}</h3></div>`;
-                 if (note) {
+                const note = AppState.notes[dateStr];
+                const journal = AppState.journal[dateStr];
+                contentEl.innerHTML += `<div class="mb-4"><h3 class="font-bold text-lg">${formatDate(new Date(dateStr + 'T12:00:00Z'))}</h3></div>`;
+                if (note) {
                     const moods = (note.moods || []).join(', ');
                     contentEl.innerHTML += `<div class="pl-4 mb-2"><p class="font-semibold">Nota Rápida:</p><p class="text-sm">Sentimientos: ${moods}</p><p class="whitespace-pre-wrap">${note.text}</p></div>`;
-                 }
-                 if (journal) {
+                }
+                if (journal) {
                     contentEl.innerHTML += `<div class="pl-4"><p class="font-semibold">Entrada de Diario:</p><p class="whitespace-pre-wrap">${journal}</p></div>`;
-                 }
+                }
             });
 
             $('#journal-report-modal').classList.remove('hidden');
         }
-        
+
         // --- LÓGICA DE CONTRASEÑA ---
         function promptForPassword(mode) {
-             AppState.passwordMode = mode;
-             const modal = $('#password-modal');
-             const title = $('#password-modal-title');
-             const text = $('#password-modal-text');
-             const oldInput = $('#password-old-input');
-             const confirmInput = $('#password-confirm-input');
-             
-             oldInput.classList.add('hidden');
-             confirmInput.classList.add('hidden');
-             
-             if (!AppState.settings.notesPassword && mode !== 'create') {
-                return promptForPassword('create');
-             }
+            AppState.passwordMode = mode;
+            const modal = $('#password-modal');
+            const title = $('#password-modal-title');
+            const text = $('#password-modal-text');
+            const oldInput = $('#password-old-input');
+            const confirmInput = $('#password-confirm-input');
 
-             if (mode === 'create') {
+            oldInput.classList.add('hidden');
+            confirmInput.classList.add('hidden');
+
+            if (!AppState.settings.notesPassword && mode !== 'create') {
+                return promptForPassword('create');
+            }
+
+            if (mode === 'create') {
                 title.textContent = 'Crear Contraseña';
                 text.textContent = 'Crea una contraseña para proteger tus notas. Guárdala en un lugar seguro.';
                 confirmInput.classList.remove('hidden');
-             } else if (mode === 'change') {
+            } else if (mode === 'change') {
                 title.textContent = 'Cambiar Contraseña';
                 text.textContent = 'Ingresa tu contraseña actual y la nueva.';
                 oldInput.classList.remove('hidden');
                 confirmInput.classList.remove('hidden');
-             } else if (mode === 'reset') {
-                 title.textContent = 'Confirmar para Resetear';
-                 text.textContent = 'Ingresa tu contraseña para confirmar que deseas resetear la aplicación.';
-             } else { // login
+            } else if (mode === 'reset') {
+                title.textContent = 'Confirmar para Resetear';
+                text.textContent = 'Ingresa tu contraseña para confirmar que deseas resetear la aplicación.';
+            } else { // login
                 title.textContent = 'Ingresar Contraseña';
                 text.textContent = 'Ingresa tu contraseña para ver tus notas.';
-             }
-             
-             modal.classList.remove('hidden');
-             $('#password-input').focus();
+            }
+
+            modal.classList.remove('hidden');
+            $('#password-input').focus();
         }
 
         function handlePasswordSubmit(e) {
@@ -1364,7 +1563,7 @@
                     return alert("Contraseña incorrecta.");
                 }
             }
-            
+
             saveState();
             if (mode !== 'reset') {
                 $('#password-modal').classList.add('hidden');
@@ -1381,7 +1580,7 @@
             toast.classList.remove('hidden');
             setTimeout(() => toast.classList.add('hidden'), 4000);
         }
-        
+
         // --- LÓGICA DE GESTIÓN, TEMAS Y OTRAS UTILIDADES ---
         function getCurrentPhase(date) {
             if (!AppState.data.fases) return null;
@@ -1458,40 +1657,40 @@
             }, timeToNotification);
         }
         function showDailyNotification() {
-             const supplementsToday = getSupplementsForDate(new Date());
-             const remaining = supplementsToday.filter(sup => !(AppState.history[toISODateString(new Date())] && AppState.history[toISODateString(new Date())][sup.nombre]));
-             const body = remaining.length > 0 ? `Tienes ${remaining.length} suplemento(s) pendiente(s).` : '¡Ya completaste tus suplementos de hoy! 🎉';
-             new Notification('Recordatorio de Suplementos', { body, icon: 'https://placehold.co/192x192/34d399/ffffff?text=Salud' });
+            const supplementsToday = getSupplementsForDate(new Date());
+            const remaining = supplementsToday.filter(sup => !(AppState.history[toISODateString(new Date())] && AppState.history[toISODateString(new Date())][sup.nombre]));
+            const body = remaining.length > 0 ? `Tienes ${remaining.length} suplemento(s) pendiente(s).` : '¡Ya completaste tus suplementos de hoy! 🎉';
+            new Notification('Recordatorio de Suplementos', { body, icon: 'https://placehold.co/192x192/34d399/ffffff?text=Salud' });
         }
 
         function handleManageViewClicks(e) {
-             const button = e.target.closest('button');
-             if (!button) return;
-             const phaseId = parseInt(button.dataset.phaseId);
-             const supplementIndex = button.dataset.supplementIndex ? parseInt(button.dataset.supplementIndex) : -1;
+            const button = e.target.closest('button');
+            if (!button) return;
+            const phaseId = parseInt(button.dataset.phaseId);
+            const supplementIndex = button.dataset.supplementIndex ? parseInt(button.dataset.supplementIndex) : -1;
 
-             if (button.classList.contains('delete-mood-btn')) {
+            if (button.classList.contains('delete-mood-btn')) {
                 const { mood, group } = button.dataset;
                 AppState.settings.moodOptions[group] = AppState.settings.moodOptions[group].filter(m => m !== mood);
                 saveState();
                 renderManageView();
-             } else if (button.classList.contains('delete-reason-btn')) {
+            } else if (button.classList.contains('delete-reason-btn')) {
                 const { reason } = button.dataset;
                 AppState.settings.reasonOptions = AppState.settings.reasonOptions.filter(r => r !== reason);
                 saveState();
                 renderManageView();
-             } else if (button.classList.contains('add-supplement-btn')) openSupplementModal({ phaseId });
-             else if (button.classList.contains('edit-supplement-btn')) openSupplementModal({ phaseId, supplementIndex });
-             else if (button.classList.contains('delete-supplement-btn')) {
-                 AppState.data.fases.find(p => p.id === phaseId).suplementos.splice(supplementIndex, 1);
-                 saveState(); render();
-             } else if (button.classList.contains('edit-phase-btn')) openPhaseModal(phaseId);
-             else if (button.classList.contains('delete-phase-btn')) {
-                 AppState.data.fases = AppState.data.fases.filter(p => p.id !== phaseId);
-                 saveState(); render();
-             }
+            } else if (button.classList.contains('add-supplement-btn')) openSupplementModal({ phaseId });
+            else if (button.classList.contains('edit-supplement-btn')) openSupplementModal({ phaseId, supplementIndex });
+            else if (button.classList.contains('delete-supplement-btn')) {
+                AppState.data.fases.find(p => p.id === phaseId).suplementos.splice(supplementIndex, 1);
+                saveState(); render();
+            } else if (button.classList.contains('edit-phase-btn')) openPhaseModal(phaseId);
+            else if (button.classList.contains('delete-phase-btn')) {
+                AppState.data.fases = AppState.data.fases.filter(p => p.id !== phaseId);
+                saveState(); render();
+            }
         }
-        
+
         function handleAddMood(e) {
             e.preventDefault();
             const input = $('#new-mood-input');
@@ -1508,13 +1707,13 @@
                 }
             }
         }
-        
+
         function handleAddReason(e) {
             e.preventDefault();
             const input = $('#new-reason-input');
             const newReason = input.value.trim();
             if (newReason) {
-                 if (!AppState.settings.reasonOptions.includes(newReason)) {
+                if (!AppState.settings.reasonOptions.includes(newReason)) {
                     AppState.settings.reasonOptions.push(newReason);
                     saveState();
                     renderManageView();
@@ -1563,23 +1762,23 @@
         }
 
         function openPhaseModal(phaseId = -1) {
-             const form = $('#phase-form');
-             form.reset();
-             $('#modal-phase-edit-id').value = phaseId;
-             if (phaseId > -1) {
+            const form = $('#phase-form');
+            form.reset();
+            $('#modal-phase-edit-id').value = phaseId;
+            if (phaseId > -1) {
                 const phase = AppState.data.fases.find(p => p.id === phaseId);
                 $('#phase-modal-title').textContent = 'Editar Fase';
                 $('#phase-name').value = phase.nombre;
                 $('#phase-start').value = phase.inicio;
                 $('#phase-end').value = phase.fin;
-             } else {
+            } else {
                 $('#phase-modal-title').textContent = 'Agregar Nueva Fase';
-             }
-             $('#phase-modal').classList.remove('hidden');
+            }
+            $('#phase-modal').classList.remove('hidden');
         }
 
         function handleAddPhaseClick() { openPhaseModal(); }
-        
+
         function handlePhaseFormSubmit(e) {
             e.preventDefault();
             const phaseId = parseInt($('#modal-phase-edit-id').value);
@@ -1603,7 +1802,7 @@
             const file = event.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 try {
                     const content = JSON.parse(e.target.result);
                     if (content.fases && Array.isArray(content.fases)) {
@@ -1628,5 +1827,5 @@
         init();
     </script>
 </body>
-</html>
 
+</html>
