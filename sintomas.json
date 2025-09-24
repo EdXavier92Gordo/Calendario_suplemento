@@ -1,0 +1,46 @@
+[
+    {
+        "categoria": "Digestión",
+        "sintomas": [
+            "Dolor abdominal",
+            "Gases / hinchazón",
+            "Náuseas / vómito",
+            "Diarrea",
+            "Estreñimiento",
+            "Cólon",
+            "Heces grasas (brillantes, flotan)"
+        ]
+    },
+    {
+        "categoria": "Energía y vitalidad",
+        "sintomas": [
+            "Fatiga / cansancio",
+            "Buena energía durante el día",
+            "Somnolencia excesiva"
+        ]
+    },
+    {
+        "categoria": "Sueño",
+        "sintomas": [
+            "Dificultad para dormir",
+            "Dormí bien"
+        ]
+    },
+    {
+        "categoria": "Estado anímico",
+        "sintomas": [
+            "Estrés / ansiedad",
+            "Irritabilidad",
+            "Estado de ánimo estable"
+        ]
+    },
+    {
+        "categoria": "Otros",
+        "sintomas": [
+            "Dolor articular o muscular",
+            "Dolor de cabeza",
+            "Molestias al orinar",
+            "Dolor de espalda o zona lumbar"
+        ]
+    }
+]

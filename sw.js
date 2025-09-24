@@ -1,11 +1,12 @@
 // sw.js - Service Worker para funcionalidad offline
 
-const CACHE_NAME = 'supplement-calendar-cache-v1';
+const CACHE_NAME = 'health-app-cache-v3'; // Versión actualizada del caché
 const urlsToCache = [
   '/',
   '/index.html',
-  // No es necesario cachear recursos de CDN como tailwind, ya que el navegador lo hace.
-  // Pero si tuvieras assets locales (css, js, imagenes), los agregarías aquí.
+  '/suplementos.json',
+  '/sintomas.json',
+  '/examenes.json' // Agregado para cachear el archivo de exámenes
 ];
 
 self.addEventListener('install', function(event) {
@@ -47,3 +48,4 @@ self.addEventListener('activate', function(event) {
     })
   );
 });
+
