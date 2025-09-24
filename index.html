@@ -1059,8 +1059,6 @@
                 document.querySelectorAll('#symptoms-checklist input[type="checkbox"]').forEach(cb => {
                     cb.checked = false;
                 });
-                const firstCheckbox = $('#symptoms-checklist input[type="checkbox"]');
-                if(firstCheckbox) firstCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
             });
             
             // Formularios
